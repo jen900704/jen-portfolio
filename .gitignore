@@ -1,22 +1,15 @@
-# Dependencies
 node_modules/
-
-# Build output
 dist/
 dist-ssr/
-
-# Editor / OS
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
 
-# Caches / temp
-npm-cache/
-.eslintcache
-.cache/
-
-# Env files
-.env
-.env.*.local
+# ignore all large static files
+public/**/*.png
+public/**/*.jpg
+public/**/*.jpeg
+public/**/*.pdf
+public/**/*.pptx
 
