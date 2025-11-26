@@ -1,0 +1,1375 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&display=swap");
+
+:root {
+  --bg: #050510;
+  --text: #f7f7f7;
+  --pointer-x: 50%;
+  --pointer-y: 30%;
+  --scroll-ratio: 0;
+  --scroll-velocity: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  background: transparent;
+}
+
+/* 整體頁面 + 背景 */
+
+.page {
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  background: linear-gradient(
+    180deg,
+    #6f3b46 0%,
+    #4d3048 30%,
+    #2b2338 60%,
+    #050510 100%
+  );
+}
+
+/* ✦ 底層流動畫布 */
+
+.page::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 0;
+
+  background: radial-gradient(
+      circle at calc(30% + var(--pointer-x) * 4%)
+        calc(40% + var(--pointer-y) * 3%),
+      rgba(255, 180, 220, 0.13),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at calc(70% - var(--pointer-x) * 5%)
+        calc(65% - var(--pointer-y) * 4%),
+      rgba(150, 200, 255, 0.15),
+      transparent 60%
+    ),
+    conic-gradient(
+      from calc(var(--pointer-x) * 1turn) at
+        calc(50% + var(--pointer-x) * 6%)
+        calc(50% + var(--pointer-y) * 6%),
+      rgba(255, 180, 200, 0.06),
+      rgba(180, 150, 255, 0.06),
+      rgba(120, 200, 255, 0.06),
+      rgba(255, 180, 200, 0.06)
+    );
+
+  background-size: 400% 400%;
+  filter: blur(55px);
+  mix-blend-mode: screen;
+  opacity: calc(0.45 + var(--scroll-velocity) * 0.3);
+
+  animation: bg-flow 30s ease-in-out infinite alternate;
+}
+
+/* ✦ 頂層細緻風 */
+
+.page::after {
+  content: "";
+  position: fixed;
+  inset: -15%;
+  pointer-events: none;
+  z-index: 0;
+
+  background: radial-gradient(
+      circle at calc(20% + var(--pointer-x) * 2%)
+        calc(80% - var(--pointer-y) * 2%),
+      rgba(255, 210, 170, 0.08),
+      transparent 65%
+    ),
+    radial-gradient(
+      circle at calc(80% - var(--pointer-x) * 2%)
+        calc(20% + var(--pointer-y) * 2%),
+      rgba(170, 200, 255, 0.08),
+      transparent 65%
+    );
+
+  background-size: 260% 260%;
+  filter: blur(40px);
+  mix-blend-mode: screen;
+  opacity: calc(0.35 + var(--scroll-ratio) * 0.25);
+
+  animation: bg-flow-2 26s ease-in-out infinite alternate;
+}
+
+/* ✦ 慢速液體動畫 */
+
+@keyframes bg-flow {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-2%, 3%, 0) scale(1.04);
+  }
+  100% {
+    transform: translate3d(2%, -3%, 0) scale(1.05);
+  }
+}
+
+/* ✦ 次層細微呼吸 */
+
+@keyframes bg-flow-2 {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(1.5%, 1.5%, 0);
+  }
+}
+
+.art-field {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+  opacity: 0.4;
+  filter: hue-rotate(calc(var(--scroll-ratio) * 30deg))
+    saturate(calc(1 + var(--scroll-velocity) * 0.2));
+  transition: opacity 0.8s ease, filter 0.6s ease;
+}
+
+.art-field--active {
+  opacity: 0.6;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(24px);
+  opacity: 0.6;
+}
+
+.orb--1 {
+  width: 220px;
+  height: 220px;
+  top: 10%;
+  left: 5%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 180, 230, 0.35),
+    transparent 70%
+  );
+  animation: orb-drift-1 22s ease-in-out infinite alternate;
+}
+
+.orb--2 {
+  width: 260px;
+  height: 260px;
+  top: 20%;
+  right: 10%;
+  background: radial-gradient(
+    circle,
+    rgba(120, 210, 255, 0.32),
+    transparent 70%
+  );
+  animation: orb-drift-2 26s ease-in-out infinite alternate;
+}
+
+.orb--3 {
+  width: 260px;
+  height: 260px;
+  bottom: 5%;
+  left: 20%;
+  background: radial-gradient(
+    circle,
+    rgba(160, 120, 255, 0.34),
+    transparent 70%
+  );
+  animation: orb-drift-3 30s ease-in-out infinite alternate;
+}
+
+.orb--4 {
+  width: 180px;
+  height: 180px;
+  bottom: 20%;
+  right: 25%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 212, 130, 0.3),
+    transparent 70%
+  );
+  animation: orb-drift-4 24s ease-in-out infinite alternate;
+}
+
+@keyframes orb-drift-1 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(18%, 8%) scale(1.05);
+  }
+}
+
+@keyframes orb-drift-2 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(-14%, -6%) scale(1.08);
+  }
+}
+
+@keyframes orb-drift-3 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(10%, -10%) scale(1.04);
+  }
+}
+
+@keyframes orb-drift-4 {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(-12%, 6%) scale(1.09);
+  }
+}
+
+/* ---------------------- */
+/* HERO LAYOUT            */
+/* ---------------------- */
+
+.hero {
+  padding: 5.5rem 10vw 4.5rem;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  transform: none;
+}
+
+/* TOP LINKS */
+
+.hero-top-links {
+  display: flex;
+  gap: 1.4rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 2.6rem;
+}
+
+.hero-top-links a {
+  color: #f8f5ff;
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hero-top-links a:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+/* TITLE & TAGLINE */
+
+.name {
+  font-size: clamp(3.6rem, 7.4vw, 4.9rem);
+  margin: 0;
+  letter-spacing: 0.07em;
+}
+
+.tagline {
+  margin-top: 1.4rem;
+  opacity: 0.9;
+  letter-spacing: 0.18em;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+}
+
+.sub {
+  max-width: 40rem;
+  margin-top: 1.8rem;
+  line-height: 1.85;
+  opacity: 0.95;
+  font-size: 1.05rem;
+  font-weight: 400;
+}
+
+/* 詩 */
+
+.poem-block {
+  margin-top: 2.9rem;
+  padding: 2rem 2.2rem;
+  border-radius: 1.6rem;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  background: rgba(10, 10, 20, 0.45);
+  cursor: pointer;
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+.poem-block:hover {
+  background: rgba(10, 10, 20, 0.48);
+}
+
+.poem-line {
+  margin: 0.32rem 0;
+  opacity: 0;
+  animation: poemFade 8s ease-in-out forwards;
+  font-family: "Caveat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+}
+
+.poem-line:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+@keyframes poemFade {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.1;
+  }
+}
+
+/* SECTION 通用 */
+
+.section {
+  padding: 4.5rem 10vw;
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: 1.4rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+.text {
+  max-width: 44rem;
+  line-height: 2;
+  opacity: 0.95;
+  font-size: 1.02rem;
+}
+
+.text + .text {
+  margin-top: 1.1rem;
+}
+
+/* MAIN LAYOUT */
+
+.main-layout {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 3rem;
+  padding: 0 10vw 4.5rem;
+  margin-top: 0.5rem;
+}
+
+.main-sections {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 讓右側 section 不再重複左右 padding */
+
+.main-sections .section {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ============================== */
+/* Sticky glass side navigation   */
+/* (matched to Projects card UI)  */
+/* ============================== */
+
+.side-nav {
+  position: fixed;
+  top: 7rem;
+  left: 2rem;
+  z-index: 10;
+
+  background: rgba(255, 255, 255, 0.045); /* 更透明 */
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+
+  border-radius: 1.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  padding: 1.2rem 1.35rem;
+  width: 180px;
+
+  box-shadow: none !important; /* 移除陰影 */
+}
+
+.side-nav-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: transparent;
+}
+
+/* 標題 */
+.side-nav-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  opacity: 0.7;
+  margin-bottom: 0.4rem;
+}
+
+/* 按鈕本體 */
+/* 讓 About 上面多一點空隙 */
+.side-nav-link:first-of-type {
+  margin-top: 0.6rem;
+}
+.side-nav-link {
+  display: block;
+  padding: 0.48rem 0.8rem;
+  border-radius: 999px;
+
+  /* 改得更透明、更柔和 */
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.88);
+
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* 去掉你不要的陰影效果（hover時也沒有陰影） */
+  box-shadow: none;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.side-nav-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.20);
+}
+
+.side-nav-link.active {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ABOUT：兩欄 */
+
+.section-about {
+  padding-top: 4rem;
+}
+
+.about-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1.1fr);
+  gap: 3rem;
+  align-items: center;
+}
+
+.about-photo-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.about-photo-ring {
+  width: 260px;
+  height: 260px;
+  border-radius: 999px;
+  padding: 5px;
+  background: radial-gradient(
+      circle at 40% 30%,
+      rgba(255, 180, 210, 0.35),
+      transparent 65%
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(150, 110, 255, 0.25),
+      transparent 70%
+    );
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.52),
+    0 0 34px rgba(255, 200, 220, 0.24);
+  opacity: 0.86;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1.4px solid rgba(255, 255, 255, 0.78);
+  filter: contrast(0.96) brightness(1.04);
+}
+
+.about-text .title {
+  margin-top: 0;
+}
+
+a {
+  color: #b9dbff;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #d7ecff;
+}
+
+/* RESEARCH */
+
+.section-research {
+  padding-top: 4.5rem;
+}
+
+.section-research .title {
+  max-width: 900px;
+  margin: 0 auto 2.4rem;
+  text-align: left;
+}
+
+/* Publications cards – meta layout */
+
+
+/* 日期靠左，小字、文青風 */
+.pub-date {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-text);
+  text-align: left;
+  margin-bottom: 0.6rem;
+}
+
+/* Lab & Advisor 文本排版 */
+.pub-lab-block {
+  margin-bottom: 1rem;
+  line-height: 1.35;
+}
+
+.pub-lab-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.pub-advisor {
+  display: block;           /* 強制換行、從最左開始 */
+  margin-top: 2px;          /* 與上面 lab 名稱留一點距離 */
+  margin-left: 0;           /* 確保不會位移 */
+  font-size: 0.85rem;
+  color: rgba(255, 180, 220, 0.85);  /* 淡粉色 */
+}
+
+
+
+
+/* ===== Footer: venue (journal/conference) + skills ===== */
+
+.pub-footer {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-direction: column;   /* 由上往下排：venue 在上、skills 在下 */
+  gap: 0.6rem;
+  align-items: flex-start;  /* 全部靠左 */
+}
+
+
+/* Tag grouping */
+.pub-venue-group,
+.pub-skill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* skill 區塊吃滿一行、靠左，等於整張卡的最底部 */
+.pub-skill-group {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.pub-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.pub-venue-group {
+  order: 1;
+}
+
+.pub-skill-group {
+  order: 2;   /* 永遠在最下面 */
+}
+
+
+/* 增加兩排 tag 間距 */
+.pub-tag-row + .pub-tag-row {
+  margin-top: 0.9rem;
+}
+
+.badge-venue,
+.badge-status,
+.badge-skill {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.35rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+
+  /* 讓 button 看起來像 span */
+  font-family: inherit;
+  line-height: 1.3;
+}
+
+/* 讓 venue-type 按鈕（Presented at..., NSTC Grant）變成圓形 pill */
+.badge-venue,
+.badge-status {
+  border-radius: 999px !important;
+  padding: 0.38rem 1rem !important;
+}
+
+/* Journal 標籤本體 */
+.badge-venue {
+  border-color: rgba(180, 150, 255, 0.35);
+  color: #d8c7ff;
+}
+
+/* 有狀態 tooltip 的 journal：點了才會浮出 */
+.badge-venue.has-status {
+  position: relative;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  border-color: rgba(200, 170, 255, 0.5);
+  z-index: 2;
+}
+
+/* 有狀態 tooltip 的 journal：點了才會浮出 */
+.badge-venue.has-status {
+  position: relative;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  border-color: rgba(200, 170, 255, 0.5);
+  z-index: 2;
+}
+
+/* 浮現的小提示框 */
+/* 浮現的小提示框：置中顯示在 badge 下方 */
+.badge-venue.has-status::after {
+  content: attr(data-status);
+  position: absolute;
+
+  left: 50%;              /* 以 badge 的中線為基準 */
+  top: 100%;              /* 放在下面 */
+  transform: translate(-50%, 8px);  /* 往左移 50% 才會剛好置中，再往下 8px */
+
+  max-width: 220px;
+  white-space: normal;
+  line-height: 1.4;
+
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.6rem;
+  background: rgba(5, 5, 16, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(245, 245, 250, 0.9);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+
+  z-index: 30;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-out;
+}
+
+
+/* hover / focus 時顯示 */
+.badge-venue.has-status:hover::after,
+.badge-venue.has-status:focus::after,
+.badge-venue.has-status:focus-visible::after {
+  opacity: 1;             /* 只改透明度，不再動 transform */
+}
+
+
+/* 狀態 tag 目前不再用到，但保留以防你之後還想用 */
+.badge-status {
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  margin-left: 0.4rem;
+}
+
+
+/* GRID & CARD 共用 */
+
+.grid {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.8rem;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* 單欄 grid（Clinical Training 用） */
+
+.grid.grid--single {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 700px;
+}
+/* Clinical Training：卡片寬度跟其他 section 一樣，和標題對齊 */
+.section-clinical .grid.grid--single {
+  max-width: 900px;   /* 和 .title 用的一樣寬 */
+  margin: 0 auto;     /* 跟其它 .grid 一樣置中整個 900px 區塊 */
+}
+
+
+/* 卡片 */
+
+.card {
+  position: relative;
+  padding: 1.8rem 1.5rem 1.4rem;
+  border-radius: 1.3rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  isolation: isolate;
+  transform: translateY(0);
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+    border-color 0.25s ease, background 0.25s ease;
+}
+
+.card-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 180, 230, 0.32) 35%,
+    rgba(120, 210, 255, 0.28) 65%,
+    transparent 100%
+  );
+  opacity: 0;
+  mix-blend-mode: screen;
+  transform: translateX(-40%);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  z-index: -1;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65),
+    0 0 40px rgba(160, 120, 255, 0.35);
+}
+
+.card:hover .card-glow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.card-title {
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+
+/* meta 行：lab / advisor / time */
+
+.card-meta {
+  margin-bottom: 0.75rem;
+}
+
+.card-meta-primary {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-soft);
+}
+
+.card-meta-secondary {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+
+
+.card-text {
+  opacity: 0.9;
+  line-height: 1.9;
+  font-size: 0.98rem;
+}
+
+.card-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+
+  justify-content: flex-start;   /* 一律靠左 */
+  align-items: flex-start;
+}
+
+
+/* 上面那顆「CODE / GITHUB / LIVE DEMO」 */
+.link-pill {
+  font-size: 0.82rem;
+  padding: 0.32rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  color: var(--text);
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+
+  order: 1;                 /* 永遠排在上面 */
+}
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 1.25rem;   /* 讓它跟上面的按鈕有一點距離 */
+}
+
+.card-tags .badge-skill {
+  font-size: 0.72rem;    /* 跟 Publications 下面的小標籤視覺上差不多 */
+}
+/* FIRST AUTHOR 黑底白字標籤 */
+.badge-firstauthor {
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(110, 90, 160, 0.42); /* 深紫灰 */
+  color: #ffffffcc; /* 柔白字 */
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
+/* Projects 卡片底部的小技術標籤：改成像 Publications 的 tags 一樣的膠囊框 */
+/* Projects 卡片底部的小技術標籤：樣式學 Publications 的 badge-skill */
+.link-pill--muted {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0.25rem 0.75rem;
+
+  /* 關鍵：不要超圓角，改成和 Publications 一樣的 0.35rem */
+  border-radius: 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  color: rgba(245, 245, 248, 0.9);
+
+  box-shadow: none;
+
+  /* 讓它排在 Code / GitHub 下面、靠左一串 */
+  order: 2;
+  flex-basis: auto;
+  margin-top: 0.4rem;
+}
+
+
+
+
+/* PROJECTS */
+
+.section-projects .title {
+  max-width: 900px;
+  margin: 0 auto 2.4rem;
+  text-align: left;
+}
+
+/* ART PORTFOLIO */
+
+.section-art-portfolio .title {
+  max-width: 900px;
+  margin: 0 auto 1.8rem;
+  text-align: left;
+}
+
+.art-portfolio-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.art-portfolio-intro {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+/* PDF 連結放在 PNG 正下方置中 */
+.art-portfolio-link {
+  margin-top: 1.3rem;
+  text-align: center;
+}
+
+.art-portfolio-link a {
+  display: inline-block;
+  font-size: 0.95rem;
+}
+
+/* EXHIBITIONS */
+.section-exhibitions .title {
+  max-width: 900px;
+  margin: 0 auto 1.8rem;
+  text-align: left;
+}
+
+.art-exhibition-block {
+  max-width: 900px;
+  margin: 0 auto;
+  border-left: 2px solid rgba(255, 255, 255, 0.18);
+  padding-left: 1rem;
+}
+
+.exh-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.exh-title {
+  opacity: 0.95;
+}
+
+.exh-date {
+  opacity: 0.75;
+  font-size: 0.88rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.exh-meta {
+  opacity: 0.85;
+  font-size: 0.9rem;
+  margin-bottom: 0.9rem;
+}
+
+.exh-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  opacity: 0.9;
+  line-height: 1.85;
+  font-size: 0.95rem;
+}
+
+
+/* CLINICAL TRAINING */
+
+.section-clinical .title {
+  max-width: 900px;
+  margin: 0 auto 2.4rem;
+  text-align: left;
+}
+
+/* EDUCATION */
+
+.section-education .title {
+  max-width: 900px;
+  margin: 0 auto 1.8rem;
+  text-align: left;
+}
+
+.education-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.edu-list {
+  list-style: none;
+  margin: 0 0 1.8rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.edu-item {
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  padding-left: 1rem;
+}
+
+.edu-degree {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.edu-school {
+  font-size: 0.92rem;
+  opacity: 0.9;
+  margin-top: 0.2rem;
+}
+
+.edu-note {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-top: 0.2rem;
+}
+
+.edu-note-block {
+  font-size: 0.95rem;
+  line-height: 1.9;
+  opacity: 0.95;
+}
+
+.edu-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-right: 0.5rem;
+}
+
+/* FOOTER */
+
+.footer {
+  padding: 3rem 0 3.5rem;
+  text-align: center;
+  opacity: 0.6;
+  font-size: 0.85rem;
+}
+
+/* =============================== */
+/* Flipbook styles  (全尺寸用)     */
+/* =============================== */
+
+/* =============================== */
+/* Flipbook styles                 */
+/* =============================== */
+
+.flipbook {
+  max-width: 900px;
+  margin: 2rem auto 0;
+}
+
+.flipbook-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.flipbook-controls-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.flipbook-controls button {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(5, 5, 16, 0.82);
+  color: var(--text);
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.flipbook-controls button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* 分頁列整體 */
+
+.flipbook-pager {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+/* First / «10 / ‹ / › / 10» / Last */
+
+.flipbook-page-nav {
+  padding: 0.18rem 0.7rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(6, 6, 18, 0.9);
+  color: rgba(245, 245, 255, 0.9);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: background 0.2s ease, border-color 0.2s ease,
+    opacity 0.2s ease, transform 0.2s ease;
+}
+
+.flipbook-page-nav:hover:not(.flipbook-page-nav--disabled) {
+  opacity: 1;
+  background: rgba(18, 18, 34, 0.98);
+  border-color: rgba(255, 255, 255, 0.38);
+  transform: translateY(-1px);
+}
+
+.flipbook-page-nav--disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* 數字頁碼本體 */
+
+.flipbook-page-dot {
+  min-width: 1.9rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(5, 5, 16, 0.9);
+  color: var(--text);
+  font-size: 0.78rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: background 0.2s ease, border-color 0.2s ease,
+    opacity 0.2s ease, transform 0.2s ease;
+}
+
+.flipbook-page-dot:hover {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+/* 目前頁：類似你現在主題裡的亮點，白+深底對比 */
+
+.flipbook-page-dot.is-active {
+  background: rgba(248, 248, 255, 0.96);
+  color: #151520;
+  border-color: rgba(255, 255, 255, 0.9);
+  opacity: 1;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
+}
+
+.flipbook-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px; /* ← 加上這個就好 */
+}
+.flipbook-frame {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.8rem;
+  border-radius: 12px; /* ← 大框更大一點 */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+/* ======================================== */
+/* RWD layout (手機版以下)                  */
+/* ======================================== */
+@media (max-width: 900px) {
+  .hero {
+    padding: 5.5rem 1.5rem 3rem;
+  }
+
+  .section {
+    padding: 3rem 1.5rem;
+  }
+
+  .main-layout {
+    flex-direction: column;
+    padding: 0 1.5rem 3rem;
+    gap: 1.8rem;
+  }
+
+  .main-sections .section {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .side-nav {
+    position: static;      /* 手機版不要固定 */
+    flex: none;
+    width: auto;
+    margin: 0 auto 2rem;
+  }
+
+  .side-nav-inner {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .side-nav-label {
+    width: 100%;
+    margin-bottom: 0.2rem;
+  }
+
+  .about-inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .about-photo-wrapper {
+    order: -1;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edu-item {
+    border-left-width: 1px;
+  }
+}
+@media (max-width: 500px) {
+  .hero-top-links {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .name {
+    font-size: clamp(2.8rem, 9vw, 4.2rem);
+  }
+}
+/* --- Education layout refinements --- */
+
+.edu-list {
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.edu-item {
+  border-left: 2px solid rgba(255, 255, 255, 0.15);
+  padding-left: 1.4rem;
+}
+
+.edu-degree {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.edu-school-row {
+  margin-top: 0.15rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.edu-school-name {
+  font-weight: 500;
+}
+
+.edu-school-dates {
+  opacity: 0.8;
+}
+
+.edu-meta-row {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.edu-pill {
+  padding: 0.18rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(180, 188, 255, 0.4);
+  background: rgba(129, 140, 248, 0.14);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #e3e7ff;
+}
+
+.edu-pill--outline {
+  background: transparent;
+}
+
+.edu-pill--sub {
+  opacity: 0.85;
+  border-style: dashed;
+}
+
+.edu-note {
+  margin-top: 0.4rem;
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Languages row微調 */
+.edu-note-block {
+  margin-top: 2rem;
+  font-size: 0.86rem;
+}
+
+.edu-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-right: 0.5rem;
+}
