@@ -1,0 +1,23 @@
+node_modules/
+dist/
+dist-ssr/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 只忽略 art-therapy 大型圖檔
+public/art-therapy-portfolio-2023/
+
+# 也忽略 reports 裡的大檔案（如果你未來放）
+public/reports/
+
+# 允許 portrait.png
+# allow portrait.png
+!public/**/*.png
+!public/**/*.jpg
+!public/**/*.jpeg
+!public/**/*.pdf
+!public/**/*.pptx
+
+
