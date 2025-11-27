@@ -248,7 +248,7 @@ function App() {
               <div className="about-photo-wrapper">
                 <div className="about-photo-ring">
                   <img
-                    src="/portrait.png"
+                    src={`${import.meta.env.BASE_URL}portrait.png`}
                     alt="Portrait of Hsiang-Chen Yeh"
                     className="about-photo"
                   />
