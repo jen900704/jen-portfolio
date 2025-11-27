@@ -1,12 +1,18 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const TOTAL_PAGES = 29;
-const IMAGE_BASE_PATH = `${import.meta.env.BASE_URL}art-therapy-portfolio-2023/`;
+
+// 圖片從 Hugging Face dataset 載入
+const IMAGE_BASE_PATH =
+  "https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/art-therapy-portfolio-2023";
 
 const pageImages = Array.from({ length: TOTAL_PAGES }, (_, i) => {
   const pageNumber = i + 1;
-  return `${IMAGE_BASE_PATH}Slide${pageNumber}.PNG`;
+  // 檔名大小寫要跟 Hugging Face 上的一樣，如果那邊是 .PNG 就用 .PNG
+  return `${IMAGE_BASE_PATH}/Slide${pageNumber}.PNG`;
 });
+
+
 
 export function PortfolioFlipbook() {
   const [page, setPage] = useState(0); // 0-based index
@@ -62,7 +68,7 @@ export function PortfolioFlipbook() {
     const isFirstBlock = currentBlock === 0;
     const isLastBlock = blockEnd === TOTAL_PAGES - 1;
 
-    const buttons: JSX.Element[] = [];
+    const buttons: React.ReactElement[] = [];
 
     // nav helper
     const addNav = (
