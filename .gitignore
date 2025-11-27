@@ -20,4 +20,6 @@ public/reports/
 !public/**/*.pdf
 !public/**/*.pptx
 
+# Allow portrait image
+!public/portrait.png
 
