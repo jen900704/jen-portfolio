@@ -14,6 +14,10 @@ public/reports/
 
 # 允許 portrait.png
 # allow portrait.png
-!public/portrait.png
+!public/**/*.png
+!public/**/*.jpg
+!public/**/*.jpeg
+!public/**/*.pdf
+!public/**/*.pptx
 
 
