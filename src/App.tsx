@@ -90,7 +90,11 @@ function App() {
       <section className="hero">
         <div className="hero-inner">
           <div className="hero-top-links">
-            <a href="/Resume_HCY.pdf" target="_blank" rel="noopener noreferrer">
+            <a
+  href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/Resume_HCY.pdf"
+  target="_blank"
+  rel="noopener noreferrer"
+>
               CV
             </a>
             <a href="mailto:hyeh10@jh.edu">Email</a>
@@ -577,7 +581,7 @@ function App() {
   {/* 我的作品連結：PDF */}
   <div className="card-links">
     <a
-      href="/04以電腦化字詞分析探討利社會說謊語言風格.pdf"
+      href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/04以電腦化字詞分析探討利社會說謊語言風格.pdf"
       target="_blank"
       rel="noopener noreferrer"
       className="link-pill"
@@ -635,7 +639,7 @@ Clinical Psychology
   {/* 我的作品連結：結案報告 */}
   <div className="card-links">
     <a
-      href="/03科技部計畫結案報告.pdf"
+      href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/03科技部計畫結案報告.pdf"
       className="link-pill"
       target="_blank"
       rel="noopener noreferrer"
@@ -839,7 +843,7 @@ Clinical Psychology
 
     <p className="art-portfolio-link">
       <a
-        href="/art-therapy-portfolio-2023.pdf"
+        href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/art-therapy-portfolio-2023.pdf"
         target="_blank"
         rel="noopener noreferrer"
       >
