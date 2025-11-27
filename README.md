@@ -112,7 +112,7 @@ This project is open for educational and personal reference.
 ## Contact
 
 Portfolio: https://jen900704.github.io/jen-portfolio  
-LinkedIn: https://www.linkedin.com/in/hsiangchenyeh/
+LinkedIn: https://www.linkedin.com/in/hsiangchenyeh/](https://www.linkedin.com/in/hsiang-chen-yeh-760bb02ba/
 
 
 
