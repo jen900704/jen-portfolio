@@ -91,7 +91,7 @@ function App() {
         <div className="hero-inner">
           <div className="hero-top-links">
             <a
-  href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/Resume_HCY.pdf"
+  href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/Resume_Jen_HC_Yeh.pdf"
   target="_blank"
   rel="noopener noreferrer"
 >
@@ -136,7 +136,7 @@ function App() {
     <a href="#top" className="side-nav-link">Top</a>
     <a href="#about" className="side-nav-link">About</a>
 
-    {/* 這三行是你必須修正的 */}
+    
     <a href="#research" className="side-nav-link">Publications</a>
     <a href="#projects" className="side-nav-link">Projects</a>
     <a href="#art-portfolio" className="side-nav-link">Art Portfolio</a>
@@ -697,7 +697,7 @@ Clinical Psychology
                 <div className="card-links">
                   <a
                     className="link-pill"
-                    href="https://github.com/jen900704/BodyMaps-Search"
+                    href="https://github.com/jen900704/BodyMaps-PanTS-Search-Viewer"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -705,7 +705,7 @@ Clinical Psychology
                   </a>
                   <a
                     className="link-pill"
-                    href="https://huggingface.co/spaces/jen900704/PanTS_Search"
+                    href="https://pan-ts-viewer.vercel.app"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -1027,3 +1027,4 @@ Clinical Psychology
 }
 
 export default App;
+
