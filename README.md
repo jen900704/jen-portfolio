@@ -58,8 +58,9 @@ Sections covering:
 - Creative Work  
 - CV & Contact  
 
-## Project Structure
 ---
+
+## Project Structure
 
 my-portfolio/
 public/
