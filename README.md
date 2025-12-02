@@ -60,18 +60,27 @@ Sections covering:
 
 ## Project Structure
 ---
+
 my-portfolio/
-├─ public/
-│ ├─ portrait.png
-│ └─ (static assets)
-├─ src/
-│ ├─ App.tsx
-│ ├─ PortfolioFlipbook.tsx
-│ ├─ components/
-│ └─ styles/
-├─ vite.config.ts
-├─ package.json
-└─ README.md
+public/
+
+portrait.png
+
+other static assets
+
+src/
+
+App.tsx
+
+PortfolioFlipbook.tsx
+
+components/
+
+styles/
+
+vite.config.ts
+package.json
+README.md
 
 
 ---
