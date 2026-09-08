@@ -4,7 +4,7 @@ export const publications: Publication[] = [
   {
     "title": "Disentangling the Interpretive and Predictive Roles of LIWC: Controlled Substitution in Depression-Related Classification.",
     "authors": "Hsiang-Chen Yeh, Xiutian Zhao, Aurosweta Mahapatra, Shreeram Suresh Chandra, Ryan L. Boyd, and Berrak Sisman",
-    "status": "EMNLP 2026, Main Conference. Accepted.",
+    "status": "EMNLP 2026, Main Conference.",
     "kind": "published",
     "links": [
       {
@@ -16,7 +16,7 @@ export const publications: Publication[] = [
   {
     "title": "Who is Speaking or Who is Depressed? A Controlled Study of Speaker Leakage in Speech-Based Depression Detection.",
     "authors": "Hsiang-Chen Yeh, Luqi Sun, Aurosweta Mahapatra, Shreeram Suresh Chandra, Emily Mower Provost, and Berrak Sisman",
-    "status": "Interspeech 2026. Accepted.",
+    "status": "Interspeech 2026.",
     "kind": "published",
     "links": [
       {
@@ -28,7 +28,7 @@ export const publications: Publication[] = [
   {
     "title": "Scam-Based Human Trafficking Through a Trauma-Informed and Intersectional Lens: An Integrative Narrative Review.",
     "authors": "Hsiang-Chen Yeh, Siqi Liu, and Tamar Rodney",
-    "status": "Trauma, Violence, & Abuse. Accepted, 2026.",
+    "status": "Trauma, Violence, & Abuse, 2026.",
     "kind": "published"
   },
   {
@@ -46,7 +46,7 @@ export const publications: Publication[] = [
   {
     "title": "Melody2Memory: Creating AIGC-Powered Music Video Recall of Autobiographical Memories.",
     "authors": "Yancheng Cao, Jingyi Chen, Hsiang-Chen Yeh (co-second author), Ruonan Fan, Anlan Wang, and Jiangtao Gong",
-    "status": "\\textitUnder review at CHI 2027.",
+    "status": "Under review at CHI 2027.",
     "kind": "review"
   },
   {

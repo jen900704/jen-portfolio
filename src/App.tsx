@@ -18,16 +18,16 @@ const routeFromHash = (): Page => {
 };
 
 const researchRoles = [
-  ['Speech and Machine Learning Lab', 'Johns Hopkins University · Center for Language & Speech Processing', 'Research Assistant · Adviser: Berrak Sisman', 'Oct 2025–Present'],
-  ['Human Language Analysis Lab', 'Vanderbilt University', 'Summer Research Intern; continuing collaborator · Adviser: H. Andrew Schwartz', 'Jun 2026–Present'],
-  ['Youth Violence AI Surveillance System', 'JHU Bloomberg School of Public Health', 'Research Assistant · Adviser: Ahmed Hassoon', 'Jan–Sep 2026'],
-  ['Research on Experience and Action with Language Models', 'Computational Social Science Lab · Vanderbilt University', 'Research Assistant · Adviser: Ryan L. Boyd', 'Oct 2025–Present'],
-  ['Computational Cognition, Vision, & Learning Group', 'Johns Hopkins University', 'Research Assistant · Advisers: Zongwei Zhou and Alan Yuille', 'Aug–Dec 2025'],
-  ['Institute for AI Industry Research', 'Tsinghua University · Human-Centered Intelligence Program', 'Research Assistant · Adviser: Jiangtao Gong', 'May–Oct 2025'],
-  ['Wellcheq', 'Digital mental health platform', 'Researcher · Adviser: Jody Miller', 'Jan–Aug 2025'],
-  ['Trauma Intervention Research Team', 'Johns Hopkins School of Nursing', 'Research Assistant · Adviser: Tamar Rodney', 'Nov 2024–Nov 2025'],
-  ['Counseling Research Team', 'Johns Hopkins School of Education', 'Research Assistant · Adviser: Norma L. Day-Vines', 'Oct 2024–Present'],
-  ['Forensic Psychology and Language Analysis Lab', 'Fu Jen Catholic University · College of Medicine', 'Research Assistant · Adviser: Chien Huang', 'Jun 2022–Jun 2024'],
+  ['Speech and Machine Learning Lab', 'Johns Hopkins University · Center for Language & Speech Processing', 'Research Assistant · Adviser: Berrak Sisman', 'Oct 2025–Present', 'https://sites.google.com/view/jhusmile', 'Lab website'],
+  ['Human Language Analysis Lab', 'Vanderbilt University', 'Summer Research Intern; continuing collaborator · Adviser: H. Andrew Schwartz', 'Jun 2026–Present', 'https://humanlanguage.org/', 'Lab website'],
+  ['Youth Violence AI Surveillance System', 'JHU Bloomberg School of Public Health', 'Research Assistant · Adviser: Ahmed Hassoon', 'Jan–Sep 2026', 'https://malonecenter.jhu.edu/people/ahmed-hassoon/', 'Adviser profile: Ahmed Hassoon'],
+  ['Research on Experience and Action with Language Models', 'Computational Social Science Lab · Vanderbilt University', 'Research Assistant · Adviser: Ryan L. Boyd', 'Oct 2025–Present', 'https://www.ryanboyd.io/', 'Adviser website: Ryan L. Boyd'],
+  ['Computational Cognition, Vision, & Learning Group', 'Johns Hopkins University', 'Research Assistant · Advisers: Zongwei Zhou and Alan Yuille', 'Aug–Dec 2025', 'https://ccvl.jhu.edu/', 'Lab website'],
+  ['Institute for AI Industry Research', 'Tsinghua University · Human-Centered Intelligence Program', 'Research Assistant · Adviser: Jiangtao Gong', 'May–Oct 2025', 'https://air.tsinghua.edu.cn/en/', 'Institute website'],
+  ['Wellcheq', 'Digital mental health platform', 'Researcher · Adviser: Jodi Miller', 'Jan–Aug 2025', 'https://wellcheq.com/', 'Organization website'],
+  ['Trauma Intervention Research Team', 'Johns Hopkins School of Nursing', 'Research Assistant · Adviser: Tamar Rodney', 'Nov 2024–Nov 2025', 'https://nursing.jhu.edu/faculty-research/faculty/directory/tamar-rodney/', 'Adviser profile: Tamar Rodney'],
+  ['Counseling Research Team', 'Johns Hopkins School of Education', 'Research Assistant · Adviser: Norma L. Day-Vines', 'Oct 2024–Present', 'https://education.jhu.edu/directory/norma-l-day-vines-phd/', 'Adviser profile: Norma L. Day-Vines'],
+  ['Forensic Psychology and Language Analysis Lab', 'Fu Jen Catholic University · College of Medicine', 'Research Assistant · Adviser: Chien Huang', 'Jun 2022–Jun 2024', 'https://www.cpsy.fju.edu.tw/', 'Department of Clinical Psychology website'],
 ];
 const honors = [
   ['2023', 'NSTC Research Grant for University Students, Taiwan'],
@@ -41,16 +41,37 @@ const honors = [
   ['2025–Present', 'Professional Member, American Counseling Association'],
 ];
 
+const peopleLinks: Record<string, string> = {
+  'Berrak Sisman': 'https://engineering.jhu.edu/faculty/berrak-sisman/',
+  'H. Andrew Schwartz': 'https://haschwartz.com/',
+  'Ahmed Hassoon': 'https://malonecenter.jhu.edu/people/ahmed-hassoon/',
+  'Ryan L. Boyd': 'https://www.ryanboyd.io/',
+  'Zongwei Zhou': 'https://www.zongweiz.com/',
+  'Alan Yuille': 'https://www.cs.jhu.edu/~ayuille/',
+  'Jiangtao Gong': 'https://air.tsinghua.edu.cn/en/info/1046/1477.htm',
+  'Jodi Miller': 'https://wellcheq.com/about-us',
+  'Tamar Rodney': 'https://nursing.jhu.edu/faculty-research/faculty/directory/tamar-rodney/',
+  'Norma L. Day-Vines': 'https://education.jhu.edu/directory/norma-l-day-vines-phd/',
+  'Chien Huang': 'https://www.cpsy.fju.edu.tw/teacherEN.jsp?type=a',
+};
+function LinkedPeople({ text }: { text: string }) {
+  const name = Object.keys(peopleLinks).find(person => text.includes(person));
+  if (!name) return <>{text}</>;
+  const start = text.indexOf(name);
+  return <><LinkedPeople text={text.slice(0, start)} /><a href={peopleLinks[name]}>{name}</a><LinkedPeople text={text.slice(start + name.length)} /></>;
+}
+
 function AuthorNames({ text }: { text: string }) {
   return <>{text.split('Hsiang-Chen Yeh').map((part, i) => <span key={i}>{i > 0 && <strong>Hsiang-Chen Yeh</strong>}{part}</span>)}</>;
 }
 function Paper({ paper }: { paper: Publication }) {
+  const primaryLink = paper.links?.[0];
+  const extraLinks = paper.links?.filter(link => link.href !== primaryLink?.href) ?? [];
   return <li className="paper">
-    <h3>{paper.links?.[0] && paper.kind === 'published'
-      ? <a href={paper.links[0].href}>{paper.title}</a> : paper.title}</h3>
+    <h3>{primaryLink ? <a href={primaryLink.href}>{paper.title}</a> : paper.title}</h3>
     <p className="authors"><AuthorNames text={paper.authors} /></p>
     <p className={paper.kind === 'published' ? 'venue' : 'status'}>{paper.status}</p>
-    {paper.links && <p className="paper-links">{paper.links.map(link => <a key={link.href} href={link.href}>{link.label}</a>)}</p>}
+    {extraLinks.length > 0 && <p className="paper-links">{extraLinks.map(link => <a key={link.href} href={link.href}>{link.label}</a>)}</p>}
   </li>;
 }
 function Research() {
@@ -61,8 +82,8 @@ function Research() {
         <h1 id="name">Hsiang-Chen <span className="nickname">(Jen)</span> Yeh</h1>
         <p className="research-keywords">Computational mental health · Speech & NLP · Multimodal learning</p>
         <p>I study how speech and language reflect emotion, meaning-making, and mental health. I develop and evaluate computational methods with an emphasis on psychologically meaningful, reliable signals.</p>
-        <p>I am an M.S. student in Clinical Mental Health Counseling at Johns Hopkins University and hold an M.S. in Computer Science from the University of Colorado Boulder. I work with Berrak Sisman at JHU and H. Andrew Schwartz and Ryan L. Boyd at Vanderbilt.</p>
-        <p className="contact-links"><a href="mailto:hyeh10@jh.edu">Email</a><a href={`${base}Jen_CV_short.pdf`}>CV</a><a href="https://github.com/jen900704">GitHub</a><a href="https://orcid.org/0009-0004-5613-4814">ORCID</a><a href="https://www.linkedin.com/in/hsiang-chen-yeh-760bb02ba">LinkedIn</a></p>
+        <p>I am an M.S. student in Clinical Mental Health Counseling at Johns Hopkins University and hold an M.S. in Computer Science from the University of Colorado Boulder. <LinkedPeople text="I work with Berrak Sisman at JHU and H. Andrew Schwartz and Ryan L. Boyd at Vanderbilt." /></p>
+        <p className="contact-links"><a className="action-link action-primary" href={`${base}Jen_CV_short.pdf`}>View CV <span className="file-label">PDF</span></a><a className="action-link action-secondary" href="mailto:hyeh10@jh.edu">Email</a><a href="https://github.com/jen900704">GitHub</a><a href="https://orcid.org/0009-0004-5613-4814">ORCID</a><a href="https://www.linkedin.com/in/hsiang-chen-yeh-760bb02ba">LinkedIn</a></p>
         <p className="availability">Seeking Fall 2027 PhD opportunities in speech, NLP, and computational mental health.</p>
       </div>
       <img className="portrait" src={`${base}portrait.png`} alt="Hsiang-Chen Yeh" width="148" height="180" />
@@ -70,9 +91,9 @@ function Research() {
     <section aria-labelledby="publications-title">
       <div className="section-heading">
         <h2 id="publications-title">Publications & Manuscripts</h2>
-        <div className="publication-switch" aria-label="Publication selection">
-          <button type="button" aria-pressed={!showAll} onClick={() => setShowAll(false)}>Selected</button>
-          <button type="button" aria-pressed={showAll} onClick={() => setShowAll(true)}>All work</button>
+        <div className="publication-switch" role="group" aria-label="Publication selection">
+          <button type="button" aria-pressed={!showAll} onClick={() => setShowAll(false)}>Selected <span className="count">3</span></button>
+          <button type="button" aria-pressed={showAll} onClick={() => setShowAll(true)}>All work <span className="count">{publications.length}</span></button>
         </div>
       </div>
       <ul className="papers">{publications.filter(p => p.kind === 'published').map(p => <Paper key={p.title} paper={p} />)}</ul>
@@ -106,9 +127,9 @@ function Experience() {
   return <>
     <header className="page-heading"><h1>Experience</h1><p>Research in speech and language, grounded in psychology and supervised clinical training.</p></header>
     <section><h2>Research experience</h2>
-      <ul className="experience-list">{researchRoles.map(([lab, institution, role, date]) => <li key={lab}>
-        <div className="entry-heading"><h3>{lab}</h3><span className="date">{date}</span></div>
-        <p>{institution}</p><p className="muted">{role}</p>
+      <ul className="experience-list">{researchRoles.map(([lab, institution, role, date, href, linkLabel]) => <li key={lab}>
+        <div className="entry-heading"><h3><a href={href} title={linkLabel}>{lab}<span className="sr-only"> ({linkLabel})</span></a></h3><span className="date">{date}</span></div>
+        <p>{institution}</p><p className="muted"><LinkedPeople text={role} /></p>
         {lab === 'Wellcheq' && <p>Analyzed global mental health trends and authored two trauma-informed, school-based intervention guides.</p>}
       </li>)}</ul>
     </section>
@@ -162,7 +183,7 @@ function BeyondResearch() {
       <p className="small"><a href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/art-therapy-portfolio-2023.pdf">Open the complete portfolio (PDF)</a></p>
     </section>
     <section><h2>Dance & creative practice</h2>
-      <ul className="dated-list"><li><span className="date">Summer 2022</span><span>Selected participant, Professional Ballet Dancer Experience Camp, <a href="https://www.taiwanballet.dance/">Taiwan Ballet Company</a>.</span></li><li><span className="date">2022</span><span>Finalist, 31st International Times Young Creative Awards.</span></li></ul>
+      <ul className="dated-list"><li><span className="date">Summer 2022</span><span>Selected participant, Professional Ballet Dancer Experience Camp, <a href="https://www.facebook.com/taiwanballet">Taiwan Ballet Company</a>.</span></li><li><span className="date">2022</span><span>Finalist, 31st International Times Young Creative Awards.</span></li></ul>
     </section>
     <section><h2>Psychology beyond the lab</h2><p>As Student Group Convener for the Taiwanese Psychological Association (2022–2024), I organized psychology lectures and academic seminars and created promotional designs. At Johns Hopkins, I chaired the Chi Sigma Iota Student Mental Health & Wellbeing Committee (2025–2026).</p></section>
   </>;
