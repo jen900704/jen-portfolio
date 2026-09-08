@@ -1,1031 +1,188 @@
-import { useState, useEffect } from "react";
-import "./App.css";
-import { PortfolioFlipbook } from "./PortfolioFlipbook";
+import { useEffect, useRef, useState } from 'react';
+import { PortfolioFlipbook } from './PortfolioFlipbook';
+import { publications, type Publication } from './publications';
+import './App.css';
 
-const poemGroups: string[][] = [
-  [
-    "In a quiet bandwidth, a voice hesitates.",
-    "Data becomes a choreography of interrupted breaths.",
-  ],
-  [
-    "Silence is a feature we never fully annotated.",
-    "Every glitch in the signal feels a little like memory.",
-  ],
-  [
-    "Somewhere between noise and meaning, I am listening.",
-    "I wait for the moment a voice begins to forgive itself.",
-  ],
+type Page = 'research' | 'experience' | 'beyond';
+const pages: { id: Page; label: string }[] = [
+  { id: 'research', label: 'Research' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'beyond', label: 'Beyond Research' },
+];
+const base = import.meta.env.BASE_URL;
+const routeFromHash = (): Page => {
+  const hash = window.location.hash.slice(1);
+  if (['beyond', 'art-portfolio', 'exhibitions'].includes(hash)) return 'beyond';
+  if (['experience', 'clinical', 'education', 'projects'].includes(hash)) return 'experience';
+  return 'research';
+};
+
+const researchRoles = [
+  ['Speech and Machine Learning Lab', 'Johns Hopkins University · Center for Language & Speech Processing', 'Research Assistant · Adviser: Berrak Sisman', 'Oct 2025–Present'],
+  ['Human Language Analysis Lab', 'Vanderbilt University', 'Summer Research Intern; continuing collaborator · Adviser: H. Andrew Schwartz', 'Jun 2026–Present'],
+  ['Youth Violence AI Surveillance System', 'JHU Bloomberg School of Public Health', 'Research Assistant · Adviser: Ahmed Hassoon', 'Jan–Sep 2026'],
+  ['Research on Experience and Action with Language Models', 'Computational Social Science Lab · Vanderbilt University', 'Research Assistant · Adviser: Ryan L. Boyd', 'Oct 2025–Present'],
+  ['Computational Cognition, Vision, & Learning Group', 'Johns Hopkins University', 'Research Assistant · Advisers: Zongwei Zhou and Alan Yuille', 'Aug–Dec 2025'],
+  ['Institute for AI Industry Research', 'Tsinghua University · Human-Centered Intelligence Program', 'Research Assistant · Adviser: Jiangtao Gong', 'May–Oct 2025'],
+  ['Wellcheq', 'Digital mental health platform', 'Researcher · Adviser: Jody Miller', 'Jan–Aug 2025'],
+  ['Trauma Intervention Research Team', 'Johns Hopkins School of Nursing', 'Research Assistant · Adviser: Tamar Rodney', 'Nov 2024–Nov 2025'],
+  ['Counseling Research Team', 'Johns Hopkins School of Education', 'Research Assistant · Adviser: Norma L. Day-Vines', 'Oct 2024–Present'],
+  ['Forensic Psychology and Language Analysis Lab', 'Fu Jen Catholic University · College of Medicine', 'Research Assistant · Adviser: Chien Huang', 'Jun 2022–Jun 2024'],
+];
+const honors = [
+  ['2023', 'NSTC Research Grant for University Students, Taiwan'],
+  ['2026', 'Ad Hoc Reviewer, Journal of Language and Social Psychology'],
+  ['2020–2024', 'Valedictorian and six Outstanding Academic Awards, Fu Jen Catholic University'],
+  ['2024–Present', 'JHU Merit Scholarship ($26,400 awarded to date)'],
+  ['2022–2024', 'Student Group Convener, Taiwanese Psychological Association'],
+  ['2025–2026', 'Student Mental Health & Wellbeing Committee Chair, Chi Sigma Iota'],
+  ['2018–2019', 'Japan-Taiwan Exchange Association Full Scholarship'],
+  ['2022', 'Finalist, 31st International Times Young Creative Awards'],
+  ['2025–Present', 'Professional Member, American Counseling Association'],
 ];
 
-function App() {
-  const [currentPoemIndex, setCurrentPoemIndex] = useState(0);
-
-  const handleNextPoem = () => {
-    setCurrentPoemIndex((prev) => (prev + 1) % poemGroups.length);
-  };
-
-  useEffect(() => {
-    const root = document.documentElement;
-
-    const handlePointerMove = (e: PointerEvent) => {
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      root.style.setProperty("--pointer-x", `${x}%`);
-      root.style.setProperty("--pointer-y", `${y}%`);
-    };
-
-    let lastY = window.scrollY;
-    let lastT = performance.now();
-
-    const handleScroll = () => {
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight || 1;
-      const ratio = window.scrollY / maxScroll;
-
-      const now = performance.now();
-      const dy = window.scrollY - lastY;
-      const dt = now - lastT || 1;
-      lastY = window.scrollY;
-      lastT = now;
-
-      const velocity = Math.min(1, (Math.abs(dy) / dt) * 40);
-
-      root.style.setProperty("--scroll-ratio", ratio.toString());
-      root.style.setProperty("--scroll-velocity", velocity.toString());
-    };
-
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    root.style.setProperty("--pointer-x", "50%");
-    root.style.setProperty("--pointer-y", "30%");
-    handleScroll();
-
-    return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    const durationMs = 8000;
-    const timer = window.setTimeout(() => {
-      setCurrentPoemIndex((prev) => (prev + 1) % poemGroups.length);
-    }, durationMs);
-    return () => window.clearTimeout(timer);
-  }, [currentPoemIndex]);
-
-    return (
-    <div className="page" id="top">
-      {/* 背景：只放光暈，不包內容 */}
-      <div className="art-field art-field--active">
-        <span className="orb orb--1" />
-        <span className="orb orb--2" />
-        <span className="orb orb--3" />
-        <span className="orb orb--4" />
-      </div>
-
-
-      {/* HERO */}
-      <section className="hero">
-        <div className="hero-inner">
-          <div className="hero-top-links">
-            <a
-  href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/Resume_HSIANG-CHEN_YEH.pdf"
-  target="_blank"
-  rel="noopener noreferrer"
->
-              CV
-            </a>
-            <a href="mailto:hyeh10@jh.edu">Email</a>
-            <a
-              href="https://www.linkedin.com/in/hsiang-chen-yeh-760bb02ba"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </a>
-          </div>
-
-          <h1 className="name">Hsiang-Chen Yeh</h1>
-
-          <p className="tagline">
-            Computational Mental Health · Speech &amp; Language · Trauma
-          </p>
-
-          <p className="sub">
-            I build systems that listen—to voices, to language, to silence.
-          </p>
-
-          <div className="poem-block" onClick={handleNextPoem}>
-            {poemGroups[currentPoemIndex].map((line, i) => (
-              <p key={`${currentPoemIndex}-${i}`} className="poem-line">
-                {line}
-              </p>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* MAIN LAYOUT：左側 sticky nav + 右側內容 */}
-      <div className="main-layout">
-        <nav className="side-nav">
-  <div className="side-nav-inner">
-    <div className="side-nav-label">Sections</div>
-
-    <a href="#top" className="side-nav-link">Top</a>
-    <a href="#about" className="side-nav-link">About</a>
-
-    
-    <a href="#research" className="side-nav-link">Publications</a>
-    <a href="#projects" className="side-nav-link">Projects</a>
-    <a href="#art-portfolio" className="side-nav-link">Art Portfolio</a>
-    <a href="#exhibitions" className="side-nav-link">Exhibitions</a>
-    <a href="#clinical" className="side-nav-link">Clinical Training</a>
-    <a href="#education" className="side-nav-link">Education</a>
-  </div>
-</nav>
-
-
-        <div className="main-sections">
-          {/* ABOUT */}
-          <section className="section section-about" id="about">
-            <div className="about-inner">
-              <div className="about-text">
-                <h2 className="title">About</h2>
-                <p className="text">
-                  I am a dual-degree graduate student in Clinical Mental Health
-                  Counseling and Computer Science at Johns Hopkins University
-                  and the University of Colorado Boulder. My work lies at the
-                  intersection of speech, language, trauma, and psychological
-                  experience. I study how people express pain, agency, and
-                  emotion through their voices and words, whether in clinical
-                  conversations, large-scale text corpora, or real-world digital
-                  interactions.
-                </p>
-                <p className="text">
-                  My research spans trauma-informed language analysis,
-                  speech-based depression detection, psycholinguistic
-                  attribution modeling, and interactive tools for medical
-                  imaging. I collaborate with groups such as the{" "}
-                  <a
-                    href="https://sites.google.com/view/jhusmile"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Smile (Speech and Machine Learning) Lab
-                  </a>{" "}
-                  at the{" "}
-                  <a
-                    href="https://www.clsp.jhu.edu/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Johns Hopkins Center for Language and Speech Processing
-                    (CLSP)
-                  </a>{" "}
-                  (PI: Dr. Berrak Sisman), the{" "}
-                  <a
-                    href="https://labs.utdallas.edu/realm/people/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    REALM Lab
-                  </a>{" "}
-                  at UT Dallas (PI: Dr. Ryan L. Boyd), and the BodyMaps team in
-                  the{" "}
-                  <a
-                    href="https://ccvl.jhu.edu/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Computational Cognition, Vision, and Learning (CCVL)
-                    research group
-                  </a>{" "}
-                  at Johns Hopkins University (led by Dr. Zongwei Zhou; CCVL
-                  PI: Dr. Alan Yuille). I also work with{" "}
-                  <a
-                    href="https://education.jhu.edu/directory/norma-l-day-vines-phd/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Dr. Norma Day-Vines
-                  </a>
-                  ’ Counseling Research Team and{" "}
-                  <a
-                    href="https://nursing.jhu.edu/faculty-research/faculty/directory/tamar-rodney/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Dr. Tamar Rodney
-                  </a>
-                  ’s Trauma Intervention Team, as well as collaborators on
-                  digital mental health initiatives with{" "}
-                  <a
-                    href="https://wellcheq.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Wellcheq
-                  </a>{" "}
-                  and VR-based intervention development with{" "}
-                  <a
-                    href="https://medicine.yale.edu/yigh/sustainable-health-initiative/venture-development-program/spring-2025-cohort/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Heal Aura
-                  </a>
-                  . These projects integrate clinical sensitivity with
-                  computational rigor to better understand human experience and
-                  resilience.
-                </p>
-
-                <p className="text">
-                  I am especially interested in models that listen for more than
-                  symptoms. I focus on subtle linguistic and acoustic patterns
-                  that accompany mental health recovery, adaptation, and
-                  emotional complexity.
-                </p>
-              </div>
-
-              <div className="about-photo-wrapper">
-                <div className="about-photo-ring">
-                  <img
-                    src={`${import.meta.env.BASE_URL}portrait.png`}
-                    alt="Portrait of Hsiang-Chen Yeh"
-                    className="about-photo"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* PUBLICATIONS / RESEARCH */}
-<section className="section section-research" id="research">
-  <h2 className="title">Publications &amp; Research</h2>
-  <div className="grid">
-    {/* 1. Speech Depression Detection */}
-    <article className="card">
-      <div className="card-glow" />
-
-      <div className="pub-date">Oct 2025 – Present</div>
-
-      <h3>Speech-Based Depression Detection</h3>
-
-      <div className="pub-lab-block">
-        <span className="pub-lab-name">
-          Smile Lab, Johns Hopkins University
-        </span>
-        <span className="pub-advisor">Advised by Dr. Berrak Sisman</span>
-      </div>
-
-      <p>
-        Deep-learning analysis of depressive and emotional expression across
-        clinical and spontaneous speech corpora. Work integrates prosodic,
-        spectral, and semantic features with an emphasis on interpretability and
-        clinically meaningful acoustic–linguistic modeling. A first-author
-        manuscript is being prepared for INTERSPEECH 2026.
-      </p>
-
-      <div className="pub-footer">
-        <div className="pub-venue-group">
-          <button
-            type="button"
-            className="badge badge-venue has-status"
-            data-status="Manuscript in preparation"
-          >
-            INTERSPEECH
-          </button>
-        </div>
-        <div className="pub-skill-group">
-  <span className="badge-firstauthor">FIRST AUTHOR</span>
-  
-  <span className="badge badge-skill">Speech &amp; language</span>
-  <span className="badge badge-skill">Depression detection</span>
-  <span className="badge badge-skill">Deep learning</span>
-</div>
-
-      </div>
-    </article>
-
-    {/* 2. Attribution & Psycholinguistics */}
-    <article className="card">
-      <div className="card-glow" />
-
-      <div className="pub-date">Oct 2025 – Present</div>
-
-      <h3>Attribution &amp; Psycholinguistics</h3>
-
-      <div className="pub-lab-block">
-        <span className="pub-lab-name">
-          REALM Lab, The University of Texas at Dallas
-        </span>
-        <span className="pub-advisor">Advised by Dr. Ryan L. Boyd</span>
-      </div>
-
-      <p>
-        Large-scale modeling of attributional language using AttributioNet
-        across datasets such as BPD MTurk, TED Talks, and the Blog Authorship
-        Corpus. Work includes data quality filtering, aggregation, reliability
-        checks, and correlation analyses linking explanatory styles to validated
-        psychological scales.
-      </p>
-
-      <div className="pub-footer">
-        <div className="pub-venue-group">
-          <button
-            type="button"
-            className="badge badge-venue has-status"
-            data-status="Paper planned"
-          >
-            Journal article
-          </button>
-        </div>
-        <div className="pub-skill-group">
-          <span className="badge badge-skill">Psycholinguistics</span>
-          <span className="badge badge-skill">Attribution modeling</span>
-          <span className="badge badge-skill">Large-scale text</span>
-        </div>
-      </div>
-    </article>
-
-    {/* 3. Medical Imaging Interaction & Web-Based CT Viewer */}
-    <article className="card">
-      <div className="card-glow" />
-
-      <div className="pub-date">Aug 2025 – Present</div>
-
-      <h3>Medical Imaging Interaction &amp; Web-Based CT Viewer</h3>
-
-      <div className="pub-lab-block">
-        <span className="pub-lab-name">
-          CCVL / BodyMaps, Johns Hopkins University
-        </span>
-        <span className="pub-advisor">Advised by Dr. Zongwei Zhou</span>
-      </div>
-
-      <p>
-        Developer for a web-based CT search-and-viewer system for large
-        thoracic segmentation datasets (PanTS, 300GB+). The interface supports
-        structured case search, slice navigation, organ mask overlays, opacity
-        controls, and PNG/GIF/video export, and serves as a front-end prototype
-        for the BodyMaps platform.
-      </p>
-
-      <div className="pub-footer">
-        <div className="pub-venue-group">
-          <button
-            type="button"
-            className="badge badge-venue has-status"
-            data-status="Manuscript in preparation"
-          >
-            MICCAI
-          </button>
-        </div>
-        <div className="pub-skill-group">
-          <span className="badge badge-skill">Medical imaging</span>
-          <span className="badge badge-skill">Web-based CT viewer</span>
-          <span className="badge badge-skill">TypeScript / React</span>
-        </div>
-      </div>
-    </article>
-
-    {/* 4. HCI / IMWUT */}
-    <article className="card">
-      <div className="card-glow" />
-
-      <div className="pub-date">May 2025 – Oct 2025</div>
-
-      <h3>Music, Emotion, and Memory – Melody2Memory Project</h3>
-
-      <div className="pub-lab-block">
-        <span className="pub-lab-name">
-          Institute for AI Industry Research (AIR), Tsinghua University
-        </span>
-        <span className="pub-advisor">Advised by Dr. Jiangtao Gong</span>
-      </div>
-
-      <p>
-        Collaborative HCI study on how AI-generated multimodal cues (music and
-        imagery) shape autobiographical memory recall, emotional processing, and
-        cognitive reappraisal. Contributions include experimental design,
-        psychological scale construction, survey implementation, quantitative
-        modeling, and interpretation of findings.
-      </p>
-
-      <div className="pub-footer">
-        <div className="pub-venue-group">
-          <button
-            type="button"
-            className="badge badge-venue has-status"
-            data-status="Under review"
-          >
-            IMWUT
-          </button>
-        </div>
-        <div className="pub-skill-group">
-          <span className="badge badge-skill">HCI</span>
-          <span className="badge badge-skill">Emotion &amp; memory</span>
-          <span className="badge badge-skill">Multimodal interaction</span>
-        </div>
-      </div>
-    </article>
-
-    {/* 5. Trauma Review 1 */}
-    <article className="card">
-      <div className="card-glow" />
-
-      <div className="pub-date">Mar 2025 – Oct 2025</div>
-
-      <h3>
-        Trauma-Informed Linguistic Analysis of Scam-Based Human Trafficking
-      </h3>
-
-      <div className="pub-lab-block">
-        <span className="pub-lab-name">
-          Trauma Intervention Research Team, Johns Hopkins School of Nursing
-        </span>
-        <span className="pub-advisor">Advised by Dr. Tamar Rodney</span>
-      </div>
-
-      <p>
-        A trauma-informed review examining linguistic, technological,
-        psychological, and structural dimensions of scam-based human
-        trafficking. The manuscript synthesizes interdisciplinary work on
-        coercion, exploitation, help-seeking, and trauma recovery.
-      </p>
-
-      <div className="pub-footer">
-        <div className="pub-venue-group">
-          <button
-            type="button"
-            className="badge badge-venue has-status"
-            data-status="Under review"
-          >
-            Trauma, Violence &amp; Abuse
-          </button>
-        </div>
-        <div className="pub-skill-group">
-          <span className="badge-firstauthor">FIRST AUTHOR</span>
-          <span className="badge badge-skill">Trauma &amp; linguistics</span>
-          <span className="badge badge-skill">Human trafficking</span>
-          <span className="badge badge-skill">Interdisciplinary review</span>
-        </div>
-      </div>
-    </article>
-
-    {/* 6. Trauma Review 2 / Empirical Study */}
-    <article className="card">
-      <div className="card-glow" />
-
-      <div className="pub-date">Nov 2024 – Dec 2025</div>
-
-      <h3>Linguistic Patterns in Trauma Intervention and Recovery</h3>
-
-      <div className="pub-lab-block">
-        <span className="pub-lab-name">
-          Trauma Intervention Research Team, Johns Hopkins School of Nursing
-        </span>
-        <span className="pub-advisor">Advised by Dr. Tamar Rodney</span>
-      </div>
-
-      <p>
-        Empirical work in progress developing a framework for analyzing language
-        used in trauma intervention contexts, with attention to emotion
-        expression, cognitive processing, and interpersonal dynamics. Planned as
-        a subsequent empirical paper building on the existing review.
-      </p>
-
-      <div className="pub-footer">
-        <div className="pub-venue-group">
-          <button
-            type="button"
-            className="badge badge-venue has-status"
-            data-status="Manuscript in preparation"
-          >
-            Journal article
-          </button>
-        </div>
-        <div className="pub-skill-group">
-          <span className="badge-firstauthor">FIRST AUTHOR</span>
-          <span className="badge badge-skill">Clinical linguistics</span>
-          <span className="badge badge-skill">Trauma intervention</span>
-          <span className="badge badge-skill">Quantitative modeling</span>
-        </div>
-      </div>
-    </article>
-
-    {/* 7. Counseling Processes & Broaching */}
-    <article className="card">
-      <div className="card-glow" />
-
-      <div className="pub-date">Oct 2024 – Present</div>
-
-      <h3>Counseling Processes &amp; Broaching Attitudes</h3>
-
-      <div className="pub-lab-block">
-        <span className="pub-lab-name">
-          Johns Hopkins University School of Education
-        </span>
-        <span className="pub-advisor">Advised by Dr. Norma Day-Vines</span>
-      </div>
-
-      <p>
-        Quantitative study on the relationship between counselors&apos; social
-        dominance attitudes and their broaching orientations in multicultural
-        counseling. Current work focuses on measure design, data collection, and
-        analytic planning for modeling counselor beliefs and behaviors.
-      </p>
-
-      <div className="pub-footer">
-        <div className="pub-venue-group">
-          <button
-            type="button"
-            className="badge badge-venue has-status"
-            data-status="Manuscript in preparation"
-          >
-            Journal of Counseling & Development
-          </button>
-        </div>
-        <div className="pub-skill-group">
-          <span className="badge badge-skill">Multicultural counseling</span>
-          <span className="badge badge-skill">Broaching</span>
-          <span className="badge badge-skill">Quantitative methods</span>
-        </div>
-      </div>
-    </article>
-    
-        {/* 6. Prosocial Lying – Linguistic Features */}
-<article className="card">
-  <div className="card-glow" />
-
-  <div className="pub-date">Sep 2022 – Apr 2023</div>
-
-  <h3 className="card-title">Prosocial Lying: Linguistic Features via LIWC</h3>
-
-  <div className="pub-lab-block">
-    <div className="pub-lab-name">
-      Forensic Psychology Lab, Fu Jen Catholic University
-    </div>
-    <span className="pub-advisor">Advised by Dr. Chien Huang</span>
-  </div>
-
-  <p className="card-text">
-    Research examining linguistic markers of prosocial lying using LIWC-based
-    computational lexical analysis. Findings indicate systematic differences in
-    pronoun use, cognitive-process terms, and hesitation markers between
-    prosocial lies and truthful responses.
-  </p>
-
-  {/* 我的作品連結：PDF */}
-  <div className="card-links">
-    <a
-      href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/04以電腦化字詞分析探討利社會說謊語言風格.pdf"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="link-pill"
-    >
-      Poster (PDF)
-    </a>
-  </div>
-
-  {/* 場域／官方連結 & tag */}
-  <div className="pub-footer">
-    <div className="pub-venue-group">
-      <a
-        href="https://taclip.org.tw/2023%EF%BD%9C%E6%9C%83%E5%93%A1%E5%A4%A7%E6%9C%83%E6%9A%A8%E5%AD%B8%E8%A1%93%E7%A0%94%E8%A8%8E%E6%9C%83/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="badge badge-venue"
-      >
-        Presented at the Annual Conference of the Taiwanese Association of
-Clinical Psychology
-      </a>
-    </div>
-
-    <div className="pub-skill-group">
-      <span className="badge badge-skill">LIWC</span>
-      <span className="badge badge-skill">Deception</span>
-      <span className="badge badge-skill">Psycholinguistics</span>
-    </div>
-  </div>
-</article>
-
-{/* 7. NSTC Research Grant – Moral Disengagement & Hate Speech */}
-<article className="card">
-  <div className="card-glow" />
-
-  <div className="pub-date">Oct 2022 – Mar 2024</div>
-
-  <h3 className="card-title">
-    Effects of Moral Disengagement, Deindividuation, and Self-Control on
-    Hate-Speech Language
-  </h3>
-
-  <div className="pub-lab-block">
-    <span className="pub-lab-name">
-      Forensic Psychology Lab, Fu Jen Catholic University
-    </span>
-    <span className="pub-advisor">Advised by Dr. Chien Huang</span>
-  </div>
-
-  <p className="card-text">
-    Competitively funded research (NSTC undergraduate grant, ~30% acceptance
-    rate) examining how moral disengagement, reduced self-control, and
-    deindividuation shape linguistic aggression on social media.
-  </p>
-
-  {/* 我的作品連結：結案報告 */}
-  <div className="card-links">
-    <a
-      href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/03科技部計畫結案報告.pdf"
-      className="link-pill"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Paper (PDF)
-    </a>
-  </div>
-
-  {/* 場域／官方連結 & tag */}
-  <div className="pub-footer">
-    <div className="pub-venue-group">
-      <a
-        href="https://wsts.nstc.gov.tw/STSWeb/Award/AwardMultiQuery.aspx?year=112&code=QS05&organ=&name=%e8%91%89%e7%bf%94%e7%a6%8e"
-        className="badge badge-venue"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        NSTC Undergraduate Research Grant
-      </a>
-    </div>
-
-    <div className="pub-skill-group">
-      <span className="badge-firstauthor">FIRST AUTHOR</span>
-      <span className="badge badge-skill">Clinical psychology</span>
-      <span className="badge badge-skill">Social media</span>
-      <span className="badge badge-skill">Quantitative analysis</span>
-    </div>
-  </div>
-</article>
-
-</div>
-</section>
-
-
-
-
-          {/* PROJECTS */}
-          <section className="section section-projects" id="projects">
-            <h2 className="title">Projects</h2>
-
-            <div className="grid">
-              {/* 1. Web-Based CT Search & Viewer */}
-              <article className="card">
-                <div className="card-glow" />
-                <h3 className="card-title">
-                  Web-Based CT Search &amp; Viewer (BodyMaps / PanTS)
-                </h3>
-                <p className="card-text">
-                  Interactive CT search and visualization interface for large
-                  thoracic segmentation datasets (PanTS, 300GB+). Combines a
-                  structured case search panel with a 3D viewer that supports
-                  slice navigation, organ label overlays, opacity controls, and
-                  export of PNG/GIF/video for clinical review and teaching.
-                </p>
-                <div className="card-links">
-                  <a
-                    className="link-pill"
-                    href="https://github.com/jen900704/BodyMaps-PanTS-Search-Viewer"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Code
-                  </a>
-                  <a
-                    className="link-pill"
-                    href="https://pan-ts-viewer.vercel.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Live demo
-                  </a>
-                  <span className="link-pill link-pill--muted">React</span>
-<span className="link-pill link-pill--muted">Flask</span>
-<span className="link-pill link-pill--muted">Medical imaging</span>
-
-                </div>
-              </article>
-
-              {/* 2. Random Forest MDD */}
-              <article className="card">
-                <div className="card-glow" />
-                <h3 className="card-title">
-                  Random Forest MDD Severity Prediction
-                </h3>
-                <p className="card-text">
-                  Predictive modeling of baseline MADRS1 using clinical and
-                  demographic variables. Implements a linear regression baseline
-                  and a Random Forest regressor, with evaluation and feature
-                  importance analysis for interpretability.
-                </p>
-                <div className="card-links">
-                  <a
-                    className="link-pill"
-                    href="https://github.com/jen900704/Random-Forest-MDD-Severity-Prediction"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub
-                  </a>
-                  <span className="link-pill link-pill--muted">Python</span>
-<span className="link-pill link-pill--muted">scikit-learn</span>
-
-                </div>
-              </article>
-
-                  {/* 3. TF-IDF Disaster Tweet Classification */}
-<article className="card">
-  <div className="card-glow" />
-
-  <h3 className="card-title">
-    TF-IDF Disaster Tweet Classification
-  </h3>
-
-  <p className="card-text">
-    Natural language processing project based on the Kaggle
-    “Natural Language Processing with Disaster Tweets” competition.
-    Builds a TF-IDF + logistic regression pipeline to classify tweets
-    as disaster-related or non-disaster-related, including text
-    cleaning, feature engineering, model training, evaluation, and
-    creation of a Kaggle submission file.
-  </p>
-
-  <div className="card-links">
-    <a
-      className="link-pill"
-      href="https://github.com/jen900704/TF-IDF-logistic-regression-disaster-tweet-classification"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      GitHub
-    </a>
-
-    {/* 這三個是技術標籤，和其他專案保持一致 */}
-    <span className="link-pill link-pill--muted">TF-IDF</span>
-    <span className="link-pill link-pill--muted">Logistic Regression</span>
-    <span className="link-pill link-pill--muted">NLP</span>
-  </div>
-</article>
-
-
-              {/* 4. PCA + K-Means */}
-              <article className="card">
-                <div className="card-glow" />
-                <h3 className="card-title">PCA and K-Means Clustering</h3>
-                <p className="card-text">
-                  Unsupervised exploration of a tabular dataset using PCA for
-                  dimensionality reduction and K-Means clustering. Includes
-                  visualizations of cluster structure in the reduced feature
-                  space.
-                </p>
-                <div className="card-links">
-                  <a
-                    className="link-pill"
-                    href="https://github.com/jen900704/Unsupervised-learning-using-PCA-and-K-means-clustering"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub
-                  </a>
-                  <span className="link-pill link-pill--muted">Unsupervised learning</span>
-
-                </div>
-              </article>
-
-              {/* 5. CNN Cancer Classification */}
-              <article className="card">
-                <div className="card-glow" />
-                <h3 className="card-title">CNN Cancer Detection</h3>
-                <p className="card-text">
-                  Convolutional neural network for binary cancer image
-                  classification on a Kaggle-style dataset. Covers data loading,
-                  model definition, training loop, and evaluation metrics.
-                </p>
-                <div className="card-links">
-                  <a
-                    className="link-pill"
-                    href="https://github.com/jen900704/CNN-Cancer-Classification"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub
-                  </a>
-                  <span className="link-pill link-pill--muted">
-                    CNN · Medical imaging
-                  </span>
-                </div>
-              </article>
-            </div>
-          </section>
-
-          <section className="section section-art-portfolio" id="art-portfolio">
-  <div className="art-portfolio-inner">
-    <h2 className="title">Art Portfolio (2023)</h2>
-
-    <p className="text art-portfolio-intro">
-      A selection of art therapy–oriented works exploring emotion, trauma, and
-      healing.
-    </p>
-
-    <PortfolioFlipbook />
-
-    <p className="art-portfolio-link">
-      <a
-        href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/art-therapy-portfolio-2023.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Open full PDF in a new tab
-      </a>
-    </p>
-  </div>
-</section>
-
-
-{/* EXHIBITIONS */}
-<section className="section section-exhibitions" id="exhibitions">
-  <h2 className="title">Exhibitions</h2>
-
-  <div className="art-exhibition-block">
-    <div className="exh-row">
-      <span className="exh-title">
-        Young Designers' Exhibition – “Freak’in Walk”
-      </span>
-      <span className="exh-date">May 2024</span>
-    </div>
-
-    <div className="exh-meta">
-      Taipei Nangang Exhibition Center, Taipei, Taiwan
-    </div>
-
-    <ul className="exh-list">
-      <li>
-        Captured the various challenges pedestrians face on the streets and
-        presented them in a visually engaging fashion show.
-      </li>
-      <li>
-        Accessible at:{" "}
-        <a
-          href="https://freakinwalk.netlify.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          https://freakinwalk.netlify.app/
-        </a>
-      </li>
-    </ul>
-  </div>
-</section>
-
-
-
-          {/* CLINICAL TRAINING (COMING SOON) */}
-<section className="section section-clinical" id="clinical">
-  <h2 className="title">Clinical Training</h2>
-  <div className="grid grid--single">
-    <article className="card">
-      <div className="card-glow" />
-      <h3 className="card-title">
-        Clinical Practicum (Spring 2026)
-      </h3>
-      <p className="card-meta">
-        Johns Hopkins AIDS Psychiatry Service,{" "}
-        <a
-          href="https://www.hopkinsmedicine.org/infectious-diseases/patient-care/locations/john-g-bartlett-specialty-practice"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-link"
-        >
-          John G. Bartlett Specialty Practice
-        </a>
-      </p>
-      <p className="card-text">
-        Planned clinical practicum focused on integrated psychiatric
-        care for people living with HIV at Johns Hopkins. Anticipated
-        training includes mood and trauma-related disorders in medical
-        settings, interdisciplinary teamwork, and trauma-informed,
-        culturally responsive care. Details will be updated.
-      </p>
-      <div className="card-links">
-        <span className="link-pill link-pill--muted">
-          Coming soon
-        </span>
-      </div>
-    </article>
-  </div>
-</section>
-
-        
-
-           {/* EDUCATION */}
-<section className="section section-education" id="education">
-  <div className="education-inner">
-    <h2 className="title">Education</h2>
-
-    <ul className="edu-list">
-      {/* JHU CMHC */}
-      <li className="edu-item">
-        <div className="edu-degree">
-          M.S., Clinical Mental Health Counseling
-        </div>
-
-        <div className="edu-school-row">
-          <span className="edu-school-name">Johns Hopkins University</span>
-          <span className="edu-school-dates">Aug 2024 – May 2027 · expected</span>
-        </div>
-
-        <div className="edu-meta-row">
-          <span className="edu-pill">GPA 3.97 / 4.0</span>
-          <span className="edu-pill">
-            JHU Merit Scholarship · USD $16,600 to date (renewable)
-          </span>
-        </div>
-
-        <div className="edu-meta-row">
-  <span className="edu-pill edu-pill--outline">
-    Chair, Mental Health & Wellbeing Committee (CSI), JHU Lambda Chapter
-  </span>
-</div>
-
-      </li>
-
-      {/* CU Boulder MSCS */}
-      <li className="edu-item">
-        <div className="edu-degree">M.S., Computer Science</div>
-
-        <div className="edu-school-row">
-          <span className="edu-school-name">University of Colorado Boulder</span>
-          <span className="edu-school-dates">Aug 2024 – Mar 2026 · expected</span>
-        </div>
-
-        <div className="edu-meta-row">
-          <span className="edu-pill">GPA 3.97 / 4.0</span>
-        </div>
-      </li>
-
-      {/* Fu Jen BA */}
-      <li className="edu-item">
-        <div className="edu-degree">
-          B.A., Applied Arts and Clinical Psychology
-        </div>
-
-        <div className="edu-school-row">
-          <span className="edu-school-name">Fu Jen Catholic University</span>
-          <span className="edu-school-dates">Sep 2020 – Jun 2024</span>
-        </div>
-
-        <div className="edu-meta-row">
-          <span className="edu-pill">GPA 4.0 / 4.0</span>
-          <span className="edu-pill">Ranked 1 / 62 · Graduated first in department</span>
-        </div>
-
-        <div className="edu-note">
-          Primary major in Applied Arts with additional coursework toward a
-          second major in Clinical Psychology.
-        </div>
-      </li>
-    </ul>
-
-    <div className="edu-note-block">
-  <span className="edu-label">Languages</span>
-  <span className="edu-text">
-    Mandarin Chinese (native), English (professional), Japanese (JLPT N1; one-year fully funded exchange at{" "}
-    <a
-      href="https://www.koryu.or.jp/tw/business/young/invitation/second.html"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Sapporo Sacred Heart School in Japan
-    </a>
-    , supported by a highly competitive award of approximately JPY 2–4 million).
-  </span>
-</div>
-
-  </div>
-</section>
-
-        </div>
-      </div>
-
-      <footer className="footer">
-        © {new Date().getFullYear()} Hsiang-Chen Yeh
-      </footer>
-    </div>
-  );
+function AuthorNames({ text }: { text: string }) {
+  return <>{text.split('Hsiang-Chen Yeh').map((part, i) => <span key={i}>{i > 0 && <strong>Hsiang-Chen Yeh</strong>}{part}</span>)}</>;
 }
-
+function Paper({ paper }: { paper: Publication }) {
+  return <li className="paper">
+    <h3>{paper.links?.[0] && paper.kind === 'published'
+      ? <a href={paper.links[0].href}>{paper.title}</a> : paper.title}</h3>
+    <p className="authors"><AuthorNames text={paper.authors} /></p>
+    <p className={paper.kind === 'published' ? 'venue' : 'status'}>{paper.status}</p>
+    {paper.links && <p className="paper-links">{paper.links.map(link => <a key={link.href} href={link.href}>{link.label}</a>)}</p>}
+  </li>;
+}
+function Research() {
+  const [showAll, setShowAll] = useState(false);
+  return <>
+    <section className="intro" aria-labelledby="name">
+      <div>
+        <h1 id="name">Hsiang-Chen <span className="nickname">(Jen)</span> Yeh</h1>
+        <p className="research-keywords">Computational mental health · Speech & NLP · Multimodal learning</p>
+        <p>I study how speech and language reflect emotion, meaning-making, and mental health. I develop and evaluate computational methods with an emphasis on psychologically meaningful, reliable signals.</p>
+        <p>I am an M.S. student in Clinical Mental Health Counseling at Johns Hopkins University and hold an M.S. in Computer Science from the University of Colorado Boulder. I work with Berrak Sisman at JHU and H. Andrew Schwartz and Ryan L. Boyd at Vanderbilt.</p>
+        <p className="contact-links"><a href="mailto:hyeh10@jh.edu">Email</a><a href={`${base}Jen_CV_short.pdf`}>CV</a><a href="https://github.com/jen900704">GitHub</a><a href="https://orcid.org/0009-0004-5613-4814">ORCID</a><a href="https://www.linkedin.com/in/hsiang-chen-yeh-760bb02ba">LinkedIn</a></p>
+        <p className="availability">Seeking Fall 2027 PhD opportunities in speech, NLP, and computational mental health.</p>
+      </div>
+      <img className="portrait" src={`${base}portrait.png`} alt="Hsiang-Chen Yeh" width="148" height="180" />
+    </section>
+    <section aria-labelledby="publications-title">
+      <div className="section-heading">
+        <h2 id="publications-title">Publications & Manuscripts</h2>
+        <div className="publication-switch" aria-label="Publication selection">
+          <button type="button" aria-pressed={!showAll} onClick={() => setShowAll(false)}>Selected</button>
+          <button type="button" aria-pressed={showAll} onClick={() => setShowAll(true)}>All work</button>
+        </div>
+      </div>
+      <ul className="papers">{publications.filter(p => p.kind === 'published').map(p => <Paper key={p.title} paper={p} />)}</ul>
+      {showAll && <>
+        <h3 className="group-heading">Peer-reviewed poster</h3>
+        <ul className="papers">{publications.filter(p => p.kind === 'poster').map(p => <Paper key={p.title} paper={p} />)}</ul>
+        <h3 className="group-heading">Under review</h3>
+        <ul className="papers">{publications.filter(p => p.kind === 'review').map(p => <Paper key={p.title} paper={p} />)}</ul>
+        <h3 className="group-heading">In preparation</h3>
+        <p className="muted small">Author order is provisional. Venues listed are intended submission targets.</p>
+        <ul className="papers">{publications.filter(p => p.kind === 'preparation').map(p => <Paper key={p.title} paper={p} />)}</ul>
+        <h3 className="group-heading">Reports & other scholarly work</h3>
+        <ul className="papers">{publications.filter(p => p.kind === 'other').map(p => <Paper key={p.title} paper={p} />)}</ul>
+      </>}
+    </section>
+    <section aria-labelledby="ongoing-title">
+      <h2 id="ongoing-title">Current research</h2>
+      <ul className="research-topics">
+        <li><strong>Speech representations and measurement.</strong> Preserving acoustic and semantic information, and testing when prosodic measures are reliable.</li>
+        <li><strong>Language and psychological experience.</strong> Studying everyday causal explanations and how people make sense of borderline personality disorder across their lives.</li>
+      </ul>
+    </section>
+    <section aria-labelledby="recognition-title">
+      <h2 id="recognition-title">Selected recognition & service</h2>
+      <ul className="dated-list">{[honors[0], honors[1], honors[2], honors[4]].map(([date, title]) => <li key={title}><span className="date">{date}</span><span>{title}</span></li>)}</ul>
+      <p className="small"><a href="#experience">Full experience, education, and honors →</a></p>
+    </section>
+  </>;
+}
+function Experience() {
+  return <>
+    <header className="page-heading"><h1>Experience</h1><p>Research in speech and language, grounded in psychology and supervised clinical training.</p></header>
+    <section><h2>Research experience</h2>
+      <ul className="experience-list">{researchRoles.map(([lab, institution, role, date]) => <li key={lab}>
+        <div className="entry-heading"><h3>{lab}</h3><span className="date">{date}</span></div>
+        <p>{institution}</p><p className="muted">{role}</p>
+        {lab === 'Wellcheq' && <p>Analyzed global mental health trends and authored two trauma-informed, school-based intervention guides.</p>}
+      </li>)}</ul>
+    </section>
+    <section><h2>Clinical training</h2>
+      <ul className="experience-list">
+        <li><div className="entry-heading"><h3>Johns Hopkins Children’s Center</h3><span className="date">Aug 2026–May 2027</span></div>
+          <p>Clinical Intern · 600 hours planned</p>
+          <p className="muted">Supervisor: <a href="https://profiles.hopkinsmedicine.org/provider/marco-grados/2705363">Marco Grados, MD, MPH</a></p>
+          <p>Child and adolescent psychiatry: ADHD, oppositional defiant disorder, anxiety, and depression.</p></li>
+        <li><div className="entry-heading"><h3>Johns Hopkins AIDS Psychiatry Service, Bartlett Clinic</h3><span className="date">Jan–May 2026</span></div>
+          <p>Practicum Trainee · 100 hours</p>
+          <p className="muted">Supervisor: <a href="https://valleyintegrativepsych.com/nicholas-p-schweizer-ed-d-lcpc/">Nicholas P. Schweizer, Ed.D., LCPC</a></p>
+          <p>Integrated psychiatric care for people living with HIV, including major depression, trauma, and substance use disorders.</p></li>
+      </ul>
+    </section>
+    <section><h2>Education</h2>
+      <ul className="experience-list">
+        <li><div className="entry-heading"><h3>Johns Hopkins University</h3><span className="date">2024–Present</span></div><p>M.S., Clinical Mental Health Counseling</p></li>
+        <li><div className="entry-heading"><h3>University of Colorado Boulder</h3><span className="date">2024–2026</span></div><p>M.S., Computer Science</p></li>
+        <li><div className="entry-heading"><h3>Fu Jen Catholic University</h3><span className="date">2020–2024</span></div><p>B.A., Applied Arts · Graduated first in the department (1/62).</p><p className="muted">Former double major in Clinical Psychology (B.S. program), College of Medicine.</p></li>
+      </ul>
+    </section>
+    <section><h2>Methods & skills</h2>
+      <p><strong>Computational:</strong> Speech/NLP, multimodal learning, corpus analysis; Python, PyTorch, R.</p>
+      <p><strong>Psychology and behavioral:</strong> Psychometrics, multilevel modeling, experimental and survey design; supervised clinical mental health counseling and trauma-informed care.</p>
+      <p><strong>Languages:</strong> Mandarin (native), English (fluent), Japanese (JLPT N1).</p>
+    </section>
+    <section><h2>Leadership, service & honors</h2><ul className="dated-list">{honors.map(([date, title]) => <li key={title}><span className="date">{date}</span><span>{title}</span></li>)}</ul></section>
+    <section><h2>Software & earlier projects</h2>
+      <h3>BodyMaps / PanTS CT search and viewer</h3>
+      <p>A web interface for exploring CT scans and segmentation masks, with cohort search, slice navigation, and visualization controls.</p>
+      <p className="paper-links"><a href="https://github.com/jen900704/BodyMaps-PanTS-Search-Viewer">Code</a><a href="https://pan-ts-viewer.vercel.app">Demo</a></p>
+      <details><summary>Earlier machine learning projects</summary><ul className="link-list">
+        <li><a href="https://github.com/jen900704/Random-Forest-MDD-Severity-Prediction">Random Forest MDD Severity Prediction</a></li>
+        <li><a href="https://github.com/jen900704/TF-IDF-logistic-regression-disaster-tweet-classification">TF-IDF Disaster Tweet Classification</a></li>
+        <li><a href="https://github.com/jen900704/Unsupervised-learning-using-PCA-and-K-means-clustering">PCA and K-Means Clustering</a></li>
+        <li><a href="https://github.com/jen900704/CNN-Cancer-Classification">CNN Cancer Detection</a></li>
+      </ul></details>
+    </section>
+  </>;
+}
+function BeyondResearch() {
+  return <>
+    <header className="page-heading"><h1>Beyond research</h1><p>My interest in emotion and human experience also takes shape through visual art, design, and movement.</p></header>
+    <section><h2>Freak’in Walk</h2><p className="muted">Young Designers’ Exhibition · Taipei Nangang Exhibition Center · May 2024</p>
+      <p>I translated the everyday challenges of walking through city streets into fashion design, presenting the work in a runway exhibition.</p>
+      <p><a href="https://freakinwalk.netlify.app/">Explore the exhibition →</a></p>
+    </section>
+    <section><h2>Art portfolio</h2><p className="muted">2023 · Visual explorations of emotion, trauma, and healing</p>
+      <PortfolioFlipbook />
+      <p className="small"><a href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/art-therapy-portfolio-2023.pdf">Open the complete portfolio (PDF)</a></p>
+    </section>
+    <section><h2>Dance & creative practice</h2>
+      <ul className="dated-list"><li><span className="date">Summer 2022</span><span>Selected participant, Professional Ballet Dancer Experience Camp, <a href="https://www.taiwanballet.dance/">Taiwan Ballet Company</a>.</span></li><li><span className="date">2022</span><span>Finalist, 31st International Times Young Creative Awards.</span></li></ul>
+    </section>
+    <section><h2>Psychology beyond the lab</h2><p>As Student Group Convener for the Taiwanese Psychological Association (2022–2024), I organized psychology lectures and academic seminars and created promotional designs. At Johns Hopkins, I chaired the Chi Sigma Iota Student Mental Health & Wellbeing Committee (2025–2026).</p></section>
+  </>;
+}
+function App() {
+  const [page, setPage] = useState<Page>(routeFromHash);
+  const mainRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const change = () => { setPage(routeFromHash()); window.scrollTo(0, 0); mainRef.current?.focus({ preventScroll: true }); };
+    window.addEventListener('hashchange', change);
+    return () => window.removeEventListener('hashchange', change);
+  }, []);
+  useEffect(() => {
+    document.title = page === 'research' ? 'Hsiang-Chen (Jen) Yeh | Computational Mental Health' : `${pages.find(p => p.id === page)?.label} | Hsiang-Chen (Jen) Yeh`;
+  }, [page]);
+  return <div className="site">
+    <a className="skip-link" href="#main-content" onClick={e => { e.preventDefault(); mainRef.current?.focus(); }}>Skip to content</a>
+    <nav className="site-nav" aria-label="Main navigation">{pages.map(p => <a key={p.id} href={`#${p.id}`} aria-current={page === p.id ? 'page' : undefined}>{p.label}</a>)}</nav>
+    <main id="main-content" tabIndex={-1} ref={mainRef}>{page === 'research' ? <Research /> : page === 'experience' ? <Experience /> : <BeyondResearch />}</main>
+    <footer><span>Hsiang-Chen (Jen) Yeh</span><span>Updated September 2026 · <a href="mailto:hyeh10@jh.edu">hyeh10@jh.edu</a></span></footer>
+  </div>;
+}
 export default App;
-
-
