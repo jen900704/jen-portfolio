@@ -1,4 +1,12 @@
-export type Publication = { title: string; authors: string; status: string; kind: string; links?: { label: string; href: string }[] };
+export type Publication = {
+  title: string;
+  authors: string;
+  status: string;
+  kind: string;
+  links?: { label: string; href: string }[];
+  highlight?: string;
+  figure?: { src: string; alt: string; caption: string; width: number; height: number };
+};
 
 export const publications: Publication[] = [
   {
@@ -8,10 +16,22 @@ export const publications: Publication[] = [
     "kind": "published",
     "links": [
       {
-        "label": "Paper",
-        "href": "https://arxiv.org/abs/2607.22952"
+        "label": "PDF",
+        "href": "https://arxiv.org/pdf/2607.22952"
+      },
+      {
+        "label": "Code",
+        "href": "https://github.com/jen900704/liwc-controlled-substitution"
       }
-    ]
+    ],
+    "highlight": "Controlled substitutions test whether LIWC adds predictive value beyond existing speech and language representations.",
+    "figure": {
+      "src": "research/emnlp-figure.png",
+      "alt": "Four LIWC conditions: intact, PCA-rotated, participant-shuffled, and random-marginal, with the properties preserved by each control.",
+      "caption": "Controlled substitution · Figure 2",
+      "width": 860,
+      "height": 984
+    }
   },
   {
     "title": "Who is Speaking or Who is Depressed? A Controlled Study of Speaker Leakage in Speech-Based Depression Detection.",
@@ -20,10 +40,22 @@ export const publications: Publication[] = [
     "kind": "published",
     "links": [
       {
-        "label": "Paper",
-        "href": "https://arxiv.org/abs/2604.14354"
+        "label": "PDF",
+        "href": "https://arxiv.org/pdf/2604.14354"
+      },
+      {
+        "label": "Code",
+        "href": "https://github.com/jen900704/Speech-Depression-Speaker-Leakage"
       }
-    ]
+    ],
+    "highlight": "Keeping training size fixed reveals how speaker overlap can inflate depression-detection performance.",
+    "figure": {
+      "src": "research/interspeech-figure.png",
+      "alt": "Size-matched speaker-independent and speaker-overlapped training sets evaluated on the same test speakers.",
+      "caption": "Speaker-overlap control · Figure 1",
+      "width": 736,
+      "height": 552
+    }
   },
   {
     "title": "Scam-Based Human Trafficking Through a Trauma-Informed and Intersectional Lens: An Integrative Narrative Review.",

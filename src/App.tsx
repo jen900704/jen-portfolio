@@ -65,13 +65,23 @@ function AuthorNames({ text }: { text: string }) {
   return <>{text.split('Hsiang-Chen Yeh').map((part, i) => <span key={i}>{i > 0 && <strong>Hsiang-Chen Yeh</strong>}{part}</span>)}</>;
 }
 function Paper({ paper }: { paper: Publication }) {
-  const primaryLink = paper.links?.[0];
-  const extraLinks = paper.links?.filter(link => link.href !== primaryLink?.href) ?? [];
-  return <li className="paper">
-    <h3>{primaryLink ? <a href={primaryLink.href}>{paper.title}</a> : paper.title}</h3>
-    <p className="authors"><AuthorNames text={paper.authors} /></p>
-    <p className={paper.kind === 'published' ? 'venue' : 'status'}>{paper.status}</p>
-    {extraLinks.length > 0 && <p className="paper-links">{extraLinks.map(link => <a key={link.href} href={link.href}>{link.label}</a>)}</p>}
+  const links = paper.links?.filter((link, index, all) => all.findIndex(item => item.href === link.href) === index) ?? [];
+  return <li className={`paper${paper.figure ? ' paper-with-figure' : ''}`}>
+    {paper.figure && <figure className="paper-figure">
+      <a href={`${base}${paper.figure.src}`} target="_blank" rel="noopener noreferrer" aria-label={`Enlarge figure: ${paper.title}`}>
+        <img src={`${base}${paper.figure.src}`} alt={paper.figure.alt} width={paper.figure.width} height={paper.figure.height} loading="lazy" />
+      </a>
+      <figcaption>{paper.figure.caption} <span aria-hidden="true">↗</span></figcaption>
+    </figure>}
+    <div className="paper-content">
+      <h3>{paper.title}</h3>
+      <p className="authors"><AuthorNames text={paper.authors} /></p>
+      <p className={paper.kind === 'published' ? 'venue' : 'status'}>{paper.status}</p>
+      {paper.highlight && <p className="paper-highlight">{paper.highlight}</p>}
+      {links.length > 0 && <div className="paper-resources" role="group" aria-label={`Resources for ${paper.title}`}>
+        {links.map(link => <a className="resource-button" key={link.href} href={link.href} aria-label={`${link.label}: ${paper.title}`}>{link.label}</a>)}
+      </div>}
+    </div>
   </li>;
 }
 function Research({ showAll, setShowAll }: { showAll: boolean; setShowAll: (value: boolean) => void }) {

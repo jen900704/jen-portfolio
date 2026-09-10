@@ -33,8 +33,6 @@
 .paper { padding: 0 0 23px; margin: 0 0 23px; border-bottom: 1px solid var(--line); }
 .paper:last-child { margin-bottom: 0; border-bottom: 0; padding-bottom: 0; }
 .paper h3 { font-size: 1.0625rem; line-height: 1.5; font-weight: 600; }
-.paper h3 a { color: #343642; }
-.paper h3 a:hover { color: var(--accent); }
 .authors { font-size: .875rem; color: var(--muted); margin-top: 7px !important; line-height: 1.6; }
 .authors strong { font-weight: 600; color: #33353e; }
 .venue { font-size: .875rem; font-weight: 600; color: var(--accent); margin-top: 6px !important; }
@@ -112,3 +110,24 @@ main:focus { outline: none; }
   .site section { margin-bottom: 20px; }
   .action-link { background: none; color: inherit; border-color: #ccc; }
 }
+
+/* Paper resources are the sole document links; figure links open the original crop. */
+.paper-with-figure { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 25px; align-items: start; padding-bottom: 28px; margin-bottom: 28px; }
+.paper-figure { margin: 0; }
+.paper-figure a { display: flex; align-items: center; justify-content: center; padding: 10px; border: 1px solid var(--line); border-radius: 5px; background: #fff; }
+.paper-figure a:hover { border-color: var(--accent); }
+.paper-figure img { display: block; width: 100%; height: auto; max-height: 225px; object-fit: contain; }
+.paper-figure figcaption { font-size: .75rem; line-height: 1.5; margin-top: 8px; color: var(--muted); }
+.paper-content { min-width: 0; }
+.paper-highlight { font-size: .9375rem; line-height: 1.6; margin-top: 10px; color: #464951; }
+.paper-resources { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; }
+.resource-button { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 4px 13px; border: 1px solid #d7bbc4; border-radius: 4px; font-size: .875rem; line-height: 1.5; font-weight: 550; color: var(--accent); background: #fff; }
+.resource-button:hover { text-decoration: none; background: #faf5f7; border-color: var(--accent); }
+@media (max-width: 700px) {
+  .paper-with-figure { grid-template-columns: minmax(0, 1fr); gap: 17px; }
+  .paper-content { grid-row: 1; }
+  .paper-figure { max-width: 320px; width: 100%; }
+  .paper-figure img { max-height: 255px; }
+  .resource-button { min-height: 44px; padding: 7px 17px; }
+}
+@media print { .paper-figure { display: none; } .paper-with-figure { display: block; } }
