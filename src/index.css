@@ -1,2 +1,31 @@
-:root{font-family:Arial,Helvetica,sans-serif;color:#272727;background:#fff;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-size:16px;line-height:1.65;font-weight:400;color-scheme:light}
-*{box-sizing:border-box}body{margin:0;min-width:320px}a{color:#245b89;text-decoration:none;text-underline-offset:3px}a:hover{text-decoration:underline}button,select{font:inherit}button{cursor:pointer}button:disabled{cursor:default}a:focus-visible,button:focus-visible,summary:focus-visible,select:focus-visible{outline:2px solid #245b89;outline-offset:4px}img{max-width:100%;height:auto}h1,h2,h3,p{margin:0}p+p{margin-top:12px}h1{font-size:31px;line-height:1.25;font-weight:600;letter-spacing:-.6px}h2{font-size:22px;line-height:1.35;font-weight:500;margin-bottom:17px}h3{font-size:16px;line-height:1.5;font-weight:600}button{background:transparent;color:inherit;border:1px solid #ccc;padding:5px 12px;border-radius:3px}button:hover:not(:disabled){border-color:#245b89;color:#245b89}button:disabled{opacity:.4}
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color: #292b31;
+  background: #fff;
+  --accent: #873850;
+  --accent-hover: #62263a;
+  --muted: #626670;
+  --line: #e7e8ec;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  line-height: 1.7;
+  font-weight: 400;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+a { color: var(--accent); text-decoration: none; text-underline-offset: 4px; }
+a:hover { color: var(--accent-hover); text-decoration: underline; }
+button, select { font: inherit; }
+button { cursor: pointer; background: transparent; color: inherit; border: 1px solid var(--line); padding: 6px 12px; border-radius: 4px; }
+button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+button:disabled { cursor: default; opacity: .45; }
+a:focus-visible, button:focus-visible, summary:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+img { max-width: 100%; height: auto; }
+h1, h2, h3, p { margin: 0; }
+p + p { margin-top: 14px; }
+h1 { font-size: 2.4rem; line-height: 1.2; font-weight: 650; letter-spacing: -.045em; }
+h2 { font-size: 1.5rem; line-height: 1.35; font-weight: 550; letter-spacing: -.025em; margin-bottom: 20px; }
+h3 { font-size: 1rem; line-height: 1.5; font-weight: 600; }

@@ -74,28 +74,38 @@ function Paper({ paper }: { paper: Publication }) {
     {extraLinks.length > 0 && <p className="paper-links">{extraLinks.map(link => <a key={link.href} href={link.href}>{link.label}</a>)}</p>}
   </li>;
 }
-function Research() {
-  const [showAll, setShowAll] = useState(false);
+function Research({ showAll, setShowAll }: { showAll: boolean; setShowAll: (value: boolean) => void }) {
+  const selectedCount = publications.filter(p => p.kind === 'published').length;
   return <>
     <section className="intro" aria-labelledby="name">
       <div>
-        <h1 id="name">Hsiang-Chen <span className="nickname">(Jen)</span> Yeh</h1>
+        <h1 id="name">Hsiang-Chen Yeh <span className="nickname">Jen</span></h1>
         <p className="research-keywords">Computational mental health · Speech & NLP · Multimodal learning</p>
-        <p>I study how speech and language reflect emotion, meaning-making, and mental health. I develop and evaluate computational methods with an emphasis on psychologically meaningful, reliable signals.</p>
+        <p className="research-statement">I study how speech and language reflect emotion, meaning-making, and mental health. I develop and evaluate computational methods with an emphasis on psychologically meaningful, reliable signals.</p>
         <p>I am an M.S. student in Clinical Mental Health Counseling at Johns Hopkins University and hold an M.S. in Computer Science from the University of Colorado Boulder. <LinkedPeople text="I work with Berrak Sisman at JHU and H. Andrew Schwartz and Ryan L. Boyd at Vanderbilt." /></p>
         <p className="contact-links"><a className="action-link action-primary" href={`${base}Jen_CV_short.pdf`}>View CV <span className="file-label">PDF</span></a><a className="action-link action-secondary" href="mailto:hyeh10@jh.edu">Email</a><a href="https://github.com/jen900704">GitHub</a><a href="https://orcid.org/0009-0004-5613-4814">ORCID</a><a href="https://www.linkedin.com/in/hsiang-chen-yeh-760bb02ba">LinkedIn</a></p>
         <p className="availability">Seeking Fall 2027 PhD opportunities in speech, NLP, and computational mental health.</p>
       </div>
       <img className="portrait" src={`${base}portrait.png`} alt="Hsiang-Chen Yeh" width="148" height="180" />
     </section>
-    <section aria-labelledby="publications-title">
+    <section aria-labelledby="ongoing-title">
+      <h2 id="ongoing-title">Research focus</h2>
+      <ul className="research-topics">
+        <li><strong>Speech representations and measurement.</strong> Preserving acoustic and semantic information, and testing when prosodic measures are reliable.</li>
+        <li><strong>Language and psychological experience.</strong> Studying everyday causal explanations and how people make sense of borderline personality disorder across their lives.</li>
+      </ul>
+    </section>
+    <section className="publications-section" aria-labelledby="publications-title">
       <div className="section-heading">
         <h2 id="publications-title">Publications & Manuscripts</h2>
         <div className="publication-switch" role="group" aria-label="Publication selection">
-          <button type="button" aria-pressed={!showAll} onClick={() => setShowAll(false)}>Selected <span className="count">3</span></button>
-          <button type="button" aria-pressed={showAll} onClick={() => setShowAll(true)}>All work <span className="count">{publications.length}</span></button>
+          <button type="button" aria-pressed={!showAll} aria-controls="publication-results" onClick={() => setShowAll(false)}>Selected work <span className="count">{selectedCount}</span></button>
+          <button type="button" aria-pressed={showAll} aria-controls="publication-results" onClick={() => setShowAll(true)}>All work <span className="count">{publications.length}</span></button>
         </div>
       </div>
+      <p className="publication-summary" role="status" aria-live="polite" aria-atomic="true">{showAll ? `All ${publications.length} works · Publications, manuscripts, and reports` : `${selectedCount} selected publications · ${publications.length} works in total`}</p>
+      <div id="publication-results" key={showAll ? 'all' : 'selected'}>
+      {showAll && <h3 className="group-heading">Publications</h3>}
       <ul className="papers">{publications.filter(p => p.kind === 'published').map(p => <Paper key={p.title} paper={p} />)}</ul>
       {showAll && <>
         <h3 className="group-heading">Peer-reviewed poster</h3>
@@ -108,13 +118,7 @@ function Research() {
         <h3 className="group-heading">Reports & other scholarly work</h3>
         <ul className="papers">{publications.filter(p => p.kind === 'other').map(p => <Paper key={p.title} paper={p} />)}</ul>
       </>}
-    </section>
-    <section aria-labelledby="ongoing-title">
-      <h2 id="ongoing-title">Current research</h2>
-      <ul className="research-topics">
-        <li><strong>Speech representations and measurement.</strong> Preserving acoustic and semantic information, and testing when prosodic measures are reliable.</li>
-        <li><strong>Language and psychological experience.</strong> Studying everyday causal explanations and how people make sense of borderline personality disorder across their lives.</li>
-      </ul>
+      </div>
     </section>
     <section aria-labelledby="recognition-title">
       <h2 id="recognition-title">Selected recognition & service</h2>
@@ -190,6 +194,7 @@ function BeyondResearch() {
 }
 function App() {
   const [page, setPage] = useState<Page>(routeFromHash);
+  const [showAll, setShowAll] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   useEffect(() => {
     const change = () => { setPage(routeFromHash()); window.scrollTo(0, 0); mainRef.current?.focus({ preventScroll: true }); };
@@ -202,7 +207,7 @@ function App() {
   return <div className="site">
     <a className="skip-link" href="#main-content" onClick={e => { e.preventDefault(); mainRef.current?.focus(); }}>Skip to content</a>
     <nav className="site-nav" aria-label="Main navigation">{pages.map(p => <a key={p.id} href={`#${p.id}`} aria-current={page === p.id ? 'page' : undefined}>{p.label}</a>)}</nav>
-    <main id="main-content" tabIndex={-1} ref={mainRef}>{page === 'research' ? <Research /> : page === 'experience' ? <Experience /> : <BeyondResearch />}</main>
+    <main id="main-content" tabIndex={-1} ref={mainRef}>{page === 'research' ? <Research showAll={showAll} setShowAll={setShowAll} /> : page === 'experience' ? <Experience /> : <BeyondResearch />}</main>
     <footer><span>Hsiang-Chen (Jen) Yeh</span><span>Updated September 2026 · <a href="mailto:hyeh10@jh.edu">hyeh10@jh.edu</a></span></footer>
   </div>;
 }
