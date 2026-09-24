@@ -18,27 +18,104 @@ const routeFromHash = (): Page => {
 };
 
 const researchRoles = [
-  ['Speech and Machine Learning Lab', 'Johns Hopkins University · Center for Language & Speech Processing', 'Research Assistant · Adviser: Berrak Sisman', 'Oct 2025–Present', 'https://sites.google.com/view/jhusmile', 'Lab website'],
-  ['Human Language Analysis Lab', 'Vanderbilt University', 'Summer Research Intern; continuing collaborator · Adviser: H. Andrew Schwartz', 'Jun 2026–Present', 'https://humanlanguage.org/', 'Lab website'],
-  ['Youth Violence AI Surveillance System', 'JHU Bloomberg School of Public Health', 'Research Assistant · Adviser: Ahmed Hassoon', 'Jan–Sep 2026', 'https://malonecenter.jhu.edu/people/ahmed-hassoon/', 'Adviser profile: Ahmed Hassoon'],
-  ['Research on Experience and Action with Language Models', 'Computational Social Science Lab · Vanderbilt University', 'Research Assistant · Adviser: Ryan L. Boyd', 'Oct 2025–Present', 'https://www.ryanboyd.io/', 'Adviser website: Ryan L. Boyd'],
-  ['Computational Cognition, Vision, & Learning Group', 'Johns Hopkins University', 'Research Assistant · Advisers: Zongwei Zhou and Alan Yuille', 'Aug–Dec 2025', 'https://ccvl.jhu.edu/', 'Lab website'],
-  ['Institute for AI Industry Research', 'Tsinghua University · Human-Centered Intelligence Program', 'Research Assistant · Adviser: Jiangtao Gong', 'May–Oct 2025', 'https://air.tsinghua.edu.cn/en/', 'Institute website'],
-  ['Wellcheq', 'Digital mental health platform', 'Researcher · Adviser: Jodi Miller', 'Jan–Aug 2025', 'https://wellcheq.com/', 'Organization website'],
-  ['Trauma Intervention Research Team', 'Johns Hopkins School of Nursing', 'Research Assistant · Adviser: Tamar Rodney', 'Nov 2024–Nov 2025', 'https://nursing.jhu.edu/faculty-research/faculty/directory/tamar-rodney/', 'Adviser profile: Tamar Rodney'],
-  ['Counseling Research Team', 'Johns Hopkins School of Education', 'Research Assistant · Adviser: Norma L. Day-Vines', 'Oct 2024–Present', 'https://education.jhu.edu/directory/norma-l-day-vines-phd/', 'Adviser profile: Norma L. Day-Vines'],
-  ['Forensic Psychology and Language Analysis Lab', 'Fu Jen Catholic University · College of Medicine', 'Research Assistant · Adviser: Chien Huang', 'Jun 2022–Jun 2024', 'https://www.cpsy.fju.edu.tw/', 'Department of Clinical Psychology website'],
+  {
+    lab: 'Speech and Machine Learning Lab',
+    institution: 'Johns Hopkins University · Center for Language & Speech Processing',
+    role: 'Research Assistant · Adviser: Berrak Sisman',
+    date: 'Oct 2025–Present',
+    href: 'https://www.clsp.jhu.edu/faculty/berrak-sisman/',
+    linkLabel: 'Adviser profile: Berrak Sisman',
+    description: 'Built controlled speech-model evaluations for depression and PTSD, examining speaker leakage and measurement reliability.',
+  },
+  {
+    lab: 'Human Language Analysis Lab',
+    institution: 'Vanderbilt University',
+    role: 'Summer 2026 Research Intern; continuing collaborator · Adviser: H. Andrew Schwartz',
+    date: 'Jun 2026–Present',
+    href: 'https://computing.vanderbilt.edu/person/h-andrew-schwartz/',
+    linkLabel: 'Adviser profile: H. Andrew Schwartz',
+    description: 'Developing and validating speech representations for PTSD and affective outcomes across clinical corpora.',
+  },
+  {
+    lab: 'Borderline Personality Disorder Research Collaboration',
+    institution: 'Cross-institutional research collaboration',
+    role: 'First-author manuscript with Vasudha Varadarajan and Allison Lahnala',
+    date: 'Jul 2026–Present',
+    href: 'https://www.lti.cs.cmu.edu/people/staff/varadarajan-vasudha.html',
+    linkLabel: 'Collaborator profile: Vasudha Varadarajan',
+    description: 'Studying onset timing, diagnostic delay, and meaning-making with collaborators at the Language Technologies Institute at Carnegie Mellon University and McMaster University.',
+  },
+  {
+    lab: 'Youth Violence AI Surveillance System',
+    institution: 'JHU Bloomberg School of Public Health',
+    role: 'Research Assistant · Adviser: Ahmed Hassoon',
+    date: 'Jan–Sep 2026',
+    href: 'https://publichealth.jhu.edu/faculty/3198/ahmed-hassoon',
+    linkLabel: 'Adviser profile: Ahmed Hassoon',
+    description: 'Built a HIPAA-compliant Azure and large language model pipeline for youth-violence surveillance in electronic health records.',
+  },
+  {
+    lab: 'Research on Experience and Action with Language Models',
+    institution: 'Computational Social Science Lab · Vanderbilt University',
+    role: 'Research Assistant · Adviser: Ryan L. Boyd',
+    date: 'Oct 2025–Present',
+    href: 'https://computing.vanderbilt.edu/person/ryan-boyd/',
+    linkLabel: 'Adviser profile: Ryan L. Boyd',
+    description: 'Applied AttributioNet to more than 125,000 observations across contexts.',
+  },
+  {
+    lab: 'Computational Cognition, Vision, & Learning Group',
+    institution: 'Johns Hopkins University',
+    role: 'Research Assistant · Advisers: Zongwei Zhou and Alan Yuille',
+    date: 'Aug–Dec 2025',
+    href: 'https://ccvl.jhu.edu/',
+    linkLabel: 'Lab website',
+    description: 'Built PanTS Viewer for more than 300 GB of computed tomography data.',
+  },
+  {
+    lab: 'Tsinghua University, Institute for AI Industry Research',
+    institution: 'Human-Centered Intelligence Program',
+    role: 'Research Assistant · Adviser: Jiangtao Gong',
+    date: 'May–Oct 2025',
+    href: 'https://air.tsinghua.edu.cn/en/',
+    linkLabel: 'Institute website',
+    description: 'Co-led psychometric evaluation of generative AI for music-evoked autobiographical memories.',
+  },
+  {
+    lab: 'WellCheq',
+    institution: 'Digital mental health platform · Remote, US',
+    role: 'Researcher · Adviser: Jodi Miller',
+    date: 'Jan–Aug 2025',
+    href: 'https://wellcheq.com/about-us',
+    linkLabel: 'Organization website',
+    description: 'Authored two trauma-informed, school-based intervention guides.',
+  },
+  {
+    lab: 'Trauma Intervention Research Team',
+    institution: 'Johns Hopkins School of Nursing',
+    role: 'Research Assistant · Adviser: Tamar Rodney',
+    date: 'Nov 2024–Nov 2025',
+    href: 'https://nursing.jhu.edu/faculty-research/faculty/directory/tamar-rodney/',
+    linkLabel: 'Adviser profile: Tamar Rodney',
+    description: 'Synthesized linguistic markers of therapeutic change for an NIH R21 application.',
+  },
+  {
+    lab: 'Forensic Psychology and Language Analysis Lab',
+    institution: 'Fu Jen Catholic University · College of Medicine',
+    role: 'Research Assistant · Adviser: Chien Huang',
+    date: 'Jun 2022–Jun 2024',
+    href: 'https://researchinfo.fju.edu.tw/professors/3114',
+    linkLabel: 'Adviser profile: Chien Huang',
+    description: 'Designed studies and conducted LIWC analyses of hate speech and prosocial lying.',
+  },
 ];
 const honors = [
-  ['2023', 'NSTC Research Grant for University Students, Taiwan'],
+  ['2023', 'Undergraduate Research Grant, National Science and Technology Council (Taiwan)'],
+  ['2018–2019', 'Japan–Taiwan Exchange Association Full Scholarship (JPY 4 million)'],
   ['2026', 'Ad Hoc Reviewer, Journal of Language and Social Psychology'],
-  ['2020–2024', 'Valedictorian and six Outstanding Academic Awards, Fu Jen Catholic University'],
-  ['2024–Present', 'JHU Merit Scholarship ($26,400 awarded to date)'],
   ['2022–2024', 'Student Group Convener, Taiwanese Psychological Association'],
   ['2025–2026', 'Student Mental Health & Wellbeing Committee Chair, Chi Sigma Iota'],
-  ['2018–2019', 'Japan-Taiwan Exchange Association Full Scholarship'],
   ['2022', 'Finalist, 31st International Times Young Creative Awards'],
-  ['2025–Present', 'Professional Member, American Counseling Association'],
 ];
 
 const peopleLinks: Record<string, string> = {
@@ -52,7 +129,9 @@ const peopleLinks: Record<string, string> = {
   'Jodi Miller': 'https://wellcheq.com/about-us',
   'Tamar Rodney': 'https://nursing.jhu.edu/faculty-research/faculty/directory/tamar-rodney/',
   'Norma L. Day-Vines': 'https://education.jhu.edu/directory/norma-l-day-vines-phd/',
-  'Chien Huang': 'https://www.cpsy.fju.edu.tw/teacherEN.jsp?type=a',
+  'Chien Huang': 'https://researchinfo.fju.edu.tw/professors/3114',
+  'Vasudha Varadarajan': 'https://www.lti.cs.cmu.edu/people/staff/varadarajan-vasudha.html',
+  'Allison Lahnala': 'https://www.eng.mcmaster.ca/cas/faculty/allison-lahnala/',
 };
 function LinkedPeople({ text }: { text: string }) {
   const name = Object.keys(peopleLinks).find(person => text.includes(person));
@@ -91,7 +170,7 @@ function Research({ showAll, setShowAll }: { showAll: boolean; setShowAll: (valu
       <div>
         <h1 id="name">Hsiang-Chen Yeh <span className="nickname">Jen</span></h1>
         <p className="research-keywords">Computational mental health · Speech & NLP · Multimodal learning</p>
-        <p className="research-statement">I study how speech and language reflect emotion, meaning-making, and mental health. I develop and evaluate computational methods with an emphasis on psychologically meaningful, reliable signals.</p>
+        <p className="research-statement">I develop speech, language, and multimodal AI methods for computational mental health. Informed by clinical training, I aim to build psychologically grounded models that generalize across people and meaningfully support mental health understanding and assessment.</p>
         <p>I am an M.S. student in Clinical Mental Health Counseling at Johns Hopkins University and hold an M.S. in Computer Science from the University of Colorado Boulder. <LinkedPeople text="I work with Berrak Sisman at JHU and H. Andrew Schwartz and Ryan L. Boyd at Vanderbilt." /></p>
         <p className="contact-links"><a className="action-link action-primary" href={`${base}Jen_CV_short.pdf`}>View CV <span className="file-label">PDF</span></a><a className="action-link action-secondary" href="mailto:hyeh10@jh.edu">Email</a><a href="https://github.com/jen900704">GitHub</a><a href="https://orcid.org/0009-0004-5613-4814">ORCID</a><a href="https://www.linkedin.com/in/hsiang-chen-yeh-760bb02ba">LinkedIn</a></p>
         <p className="availability">Seeking Fall 2027 PhD opportunities in speech, NLP, and computational mental health.</p>
@@ -101,8 +180,8 @@ function Research({ showAll, setShowAll }: { showAll: boolean; setShowAll: (valu
     <section aria-labelledby="ongoing-title">
       <h2 id="ongoing-title">Research focus</h2>
       <ul className="research-topics">
-        <li><strong>Speech representations and measurement.</strong> Preserving acoustic and semantic information, and testing when prosodic measures are reliable.</li>
-        <li><strong>Language and psychological experience.</strong> Studying everyday causal explanations and how people make sense of borderline personality disorder across their lives.</li>
+        <li><strong>Speech representations for mental health.</strong> Building psychologically grounded models and testing whether speech measures generalize across speakers and clinical contexts.</li>
+        <li><strong>Language and psychological experience.</strong> Studying everyday causal explanations, diagnostic delay, and meaning-making in borderline personality disorder.</li>
       </ul>
     </section>
     <section className="publications-section" aria-labelledby="publications-title">
@@ -123,7 +202,7 @@ function Research({ showAll, setShowAll }: { showAll: boolean; setShowAll: (valu
         <h3 className="group-heading">Under review</h3>
         <ul className="papers">{publications.filter(p => p.kind === 'review').map(p => <Paper key={p.title} paper={p} />)}</ul>
         <h3 className="group-heading">In preparation</h3>
-        <p className="muted small">Author order is provisional. Venues listed are intended submission targets.</p>
+        <p className="muted small">Venues listed are intended submission targets.</p>
         <ul className="papers">{publications.filter(p => p.kind === 'preparation').map(p => <Paper key={p.title} paper={p} />)}</ul>
         <h3 className="group-heading">Reports & other scholarly work</h3>
         <ul className="papers">{publications.filter(p => p.kind === 'other').map(p => <Paper key={p.title} paper={p} />)}</ul>
@@ -132,7 +211,7 @@ function Research({ showAll, setShowAll }: { showAll: boolean; setShowAll: (valu
     </section>
     <section aria-labelledby="recognition-title">
       <h2 id="recognition-title">Selected recognition & service</h2>
-      <ul className="dated-list">{[honors[0], honors[1], honors[2], honors[4]].map(([date, title]) => <li key={title}><span className="date">{date}</span><span>{title}</span></li>)}</ul>
+      <ul className="dated-list">{honors.slice(0, 4).map(([date, title]) => <li key={title}><span className="date">{date}</span><span>{title}</span></li>)}</ul>
       <p className="small"><a href="#experience">Full experience, education, and honors →</a></p>
     </section>
   </>;
@@ -141,34 +220,35 @@ function Experience() {
   return <>
     <header className="page-heading"><h1>Experience</h1><p>Research in speech and language, grounded in psychology and supervised clinical training.</p></header>
     <section><h2>Research experience</h2>
-      <ul className="experience-list">{researchRoles.map(([lab, institution, role, date, href, linkLabel]) => <li key={lab}>
+      <ul className="experience-list">{researchRoles.map(({ lab, institution, role, date, href, linkLabel, description }) => <li key={lab}>
         <div className="entry-heading"><h3><a href={href} title={linkLabel}>{lab}<span className="sr-only"> ({linkLabel})</span></a></h3><span className="date">{date}</span></div>
         <p>{institution}</p><p className="muted"><LinkedPeople text={role} /></p>
-        {lab === 'Wellcheq' && <p>Analyzed global mental health trends and authored two trauma-informed, school-based intervention guides.</p>}
+        <p><LinkedPeople text={description} /></p>
       </li>)}</ul>
     </section>
     <section><h2>Clinical training</h2>
       <ul className="experience-list">
-        <li><div className="entry-heading"><h3>Johns Hopkins Children’s Center</h3><span className="date">Aug 2026–May 2027</span></div>
-          <p>Clinical Intern · 600 hours planned</p>
+        <li><div className="entry-heading"><h3><a href="https://www.hopkinsmedicine.org/psychiatry/specialty-areas/child-adolescent">Johns Hopkins Child & Adolescent Psychiatry / Pediatric Emergency Department</a></h3><span className="date">Aug 2026–May 2027</span></div>
+          <p>Clinical Mental Health Counseling Intern · 600-hour internship</p>
           <p className="muted">Supervisor: <a href="https://profiles.hopkinsmedicine.org/provider/marco-grados/2705363">Marco Grados, MD, MPH</a></p>
-          <p>Child and adolescent psychiatry: ADHD, oppositional defiant disorder, anxiety, and depression.</p></li>
+          <p>Family-Based Crisis Intervention, suicide risk assessment, and safety planning for youth with ADHD, anxiety, depression, and oppositional defiant disorder.</p></li>
         <li><div className="entry-heading"><h3>Johns Hopkins AIDS Psychiatry Service, Bartlett Clinic</h3><span className="date">Jan–May 2026</span></div>
-          <p>Practicum Trainee · 100 hours</p>
-          <p className="muted">Supervisor: <a href="https://valleyintegrativepsych.com/nicholas-p-schweizer-ed-d-lcpc/">Nicholas P. Schweizer, Ed.D., LCPC</a></p>
-          <p>Integrated psychiatric care for people living with HIV, including major depression, trauma, and substance use disorders.</p></li>
+          <p>Practicum Trainee · 100-hour practicum</p>
+          <p className="muted">Supervisor: <a href="https://valleyintegrativepsych.com/nicholas-p-schweizer-ed-d-lcpc/">Nicholas P. Schweizer, EdD, LCPC</a></p>
+          <p>Clinical training with clients living with HIV and co-occurring depression, trauma, or substance use disorders.</p></li>
       </ul>
     </section>
     <section><h2>Education</h2>
       <ul className="experience-list">
-        <li><div className="entry-heading"><h3>Johns Hopkins University</h3><span className="date">2024–Present</span></div><p>M.S., Clinical Mental Health Counseling</p></li>
-        <li><div className="entry-heading"><h3>University of Colorado Boulder</h3><span className="date">2024–2026</span></div><p>M.S., Computer Science</p></li>
-        <li><div className="entry-heading"><h3>Fu Jen Catholic University</h3><span className="date">2020–2024</span></div><p>B.A., Applied Arts · Graduated first in the department (1/62).</p><p className="muted">Former double major in Clinical Psychology (B.S. program), College of Medicine.</p></li>
+        <li><div className="entry-heading"><h3>Johns Hopkins University</h3><span className="date">Aug 2024–May 2027 (expected)</span></div><p>M.S., Clinical Mental Health Counseling · GPA: 3.96/4.0</p><p className="muted">JHU Merit Scholarship: $26,400 awarded to date. Pursuing licensure as a Maryland Licensed Clinical Professional Counselor.</p></li>
+        <li><div className="entry-heading"><h3>University of Colorado Boulder</h3><span className="date">Aug 2024–May 2026</span></div><p>M.S., Computer Science (online) · GPA: 3.93/4.0</p><p className="muted">Relevant coursework: Deep Learning for NLP; Introduction to Machine Learning; Approximation Algorithms and Linear Programming; Advanced Data Structures, RSA and Quantum Algorithms.</p></li>
+        <li><div className="entry-heading"><h3>Fu Jen Catholic University</h3><span className="date">Sep 2020–Jun 2024</span></div><p>B.A., Applied Arts · GPA: 4.0/4.0; rank 1/62</p><p className="muted">Former double major in Clinical Psychology (B.S. program), College of Medicine. Valedictorian; six Outstanding Academic Awards.</p></li>
       </ul>
     </section>
     <section><h2>Methods & skills</h2>
-      <p><strong>Computational:</strong> Speech/NLP, multimodal learning, corpus analysis; Python, PyTorch, R.</p>
-      <p><strong>Psychology and behavioral:</strong> Psychometrics, multilevel modeling, experimental and survey design; supervised clinical mental health counseling and trauma-informed care.</p>
+      <p><strong>Psychology & behavioral methods:</strong> Psychological measurement, experimental and survey design, clinical interviewing, suicide risk assessment, and trauma-informed counseling.</p>
+      <p><strong>Quantitative & computational methods:</strong> Reliability and construct validation, multilevel and robust regression, equivalence testing, speech/NLP representation learning, multimodal modeling, and participant-level validation.</p>
+      <p><strong>Software & tools:</strong> Python, R, PyTorch, Hugging Face, scikit-learn, LIWC, Linux/Slurm, Git, and Microsoft Azure.</p>
       <p><strong>Languages:</strong> Mandarin (native), English (fluent), Japanese (JLPT N1).</p>
     </section>
     <section><h2>Leadership, service & honors</h2><ul className="dated-list">{honors.map(([date, title]) => <li key={title}><span className="date">{date}</span><span>{title}</span></li>)}</ul></section>

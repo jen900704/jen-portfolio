@@ -60,11 +60,17 @@ export const publications: Publication[] = [
   {
     "title": "Scam-Based Human Trafficking Through a Trauma-Informed and Intersectional Lens: An Integrative Narrative Review.",
     "authors": "Hsiang-Chen Yeh, Siqi Liu, and Tamar Rodney",
-    "status": "Trauma, Violence, & Abuse, 2026.",
-    "kind": "published"
+    "status": "Trauma, Violence, & Abuse (2026, in press).",
+    "kind": "published",
+    "links": [
+      {
+        "label": "DOI",
+        "href": "https://doi.org/10.1177/15248380261487139"
+      }
+    ]
   },
   {
-    "title": "Cognitive Load and the Linguistic Features of Prosocial Lying.",
+    "title": "Linguistic Features of Prosocial Lying: A Computerized Text Analysis.",
     "authors": "Yueh-Che Hsieh, Hsiang-Chen Yeh, Chou-Ying Chen, and Chien Huang",
     "status": "Peer-reviewed poster, Annual Conference of the Taiwan Association of Clinical Psychology, 2023.",
     "kind": "poster",
@@ -76,51 +82,51 @@ export const publications: Publication[] = [
     ]
   },
   {
-    "title": "Melody2Memory: Creating AIGC-Powered Music Video Recall of Autobiographical Memories.",
+    "title": "Word-Aligned Prosody Reflects Speaker Differences More Than Depression or PTSD Severity.",
+    "authors": "Hsiang-Chen Yeh, Aurosweta Mahapatra, Shreeram Suresh Chandra, Ryan L. Boyd, and Berrak Sisman",
+    "status": "Submitted to ICASSP 2027.",
+    "kind": "review"
+  },
+  {
+    "title": "When Memories Become Visible: Externalizing Music-Evoked Autobiographical Memories with Generative AI.",
     "authors": "Yancheng Cao, Jingyi Chen, Hsiang-Chen Yeh (co-second author), Ruonan Fan, Anlan Wang, and Jiangtao Gong",
     "status": "Under review at CHI 2027.",
     "kind": "review"
   },
   {
-    "title": "Preserving Acoustic and Semantic Information in General-Purpose Speech Representations.",
+    "title": "Speech Representation Model for Computational Mental Health.",
     "authors": "Hsiang-Chen Yeh and H. Andrew Schwartz",
-    "status": "In preparation for ACL 2027.",
-    "kind": "preparation"
-  },
-  {
-    "title": "Is Word-Level Prosody Reliable for Computational Psychology? Evidence from Emotional Speech.",
-    "authors": "Hsiang-Chen Yeh, Aurosweta Mahapatra, Ryan L. Boyd, and Berrak Sisman",
-    "status": "In preparation for ICASSP 2027.",
+    "status": "Target: ACL 2027.",
     "kind": "preparation"
   },
   {
     "title": "Attribution in the Wild: A Large-Scale Computational Analysis of Everyday Causal Explanation.",
     "authors": "Hsiang-Chen Yeh, Adam K. Fetterman, and Ryan L. Boyd",
-    "status": "In preparation for submission to Communications Psychology.",
+    "status": "Target: Communications Psychology.",
     "kind": "preparation"
   },
   {
-    "title": "Making Sense of Borderline Personality Disorder Across the Life Course: A Computational Analysis of Personal Narratives.",
-    "authors": "Hsiang-Chen Yeh, Ryan L. Boyd, Philip Resnik, Allison Lahnala, and Vasudha Varadarajan",
-    "status": "In preparation for submission to JMIR Mental Health.",
-    "kind": "preparation"
-  },
-  {
-    "title": "An Investigation of the Relationship Between Mental Health Providers' Social Attitudes and Their Self-Reported Broaching Orientation.",
-    "authors": "Hilde Depauw, Hsiang-Chen Yeh, Kristy Theodore, Siqi Liu, Meng-Lin Hsieh, Hsin-Ya Tang, and Norma L. Day-Vines",
-    "status": "In preparation for Journal of Counseling & Development.",
+    "title": "Onset Timing, Diagnostic Delay, and Narrative Language in Adults With Self-Reported Borderline Personality Disorder.",
+    "authors": "Hsiang-Chen Yeh, Allison Lahnala, and Vasudha Varadarajan",
+    "status": "Target: JMIR Mental Health.",
     "kind": "preparation"
   },
   {
     "title": "ShapeKit for Label-Free Failure Triage in Complex Organ Segmentation.",
     "authors": "Koushik Swarna, Wenxuan Li, Hsiang-Chen Yeh, and Zongwei Zhou",
-    "status": "In preparation.",
+    "status": "Target: MICCAI.",
+    "kind": "preparation"
+  },
+  {
+    "title": "An Investigation of the Relationship Between Mental Health Providers' Social Attitudes and Their Self-Reported Broaching Orientation.",
+    "authors": "Hilde Depauw, Norma L. Day-Vines, Hsiang-Chen Yeh, Kristy Theodore, Siqi Liu, Meng-Lin Hsieh, and Hsin-Ya Tang",
+    "status": "Target: Journal of Counseling & Development.",
     "kind": "preparation"
   },
   {
     "title": "Effects of Moral Disengagement, Deindividuation, and Reduced Self-Control on the Linguistic Features of Hate Speech within Social Media.",
     "authors": "Hsiang-Chen Yeh and Chien Huang",
-    "status": "Final research report, competitive NSTC undergraduate research grant.",
+    "status": "National Science and Technology Council final research report (Taiwan, 2023).",
     "kind": "other",
     "links": [
       {
