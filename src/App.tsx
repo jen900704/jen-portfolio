@@ -298,7 +298,7 @@ function App() {
     <a className="skip-link" href="#main-content" onClick={e => { e.preventDefault(); mainRef.current?.focus(); }}>Skip to content</a>
     <nav className="site-nav" aria-label="Main navigation">{pages.map(p => <a key={p.id} href={`#${p.id}`} aria-current={page === p.id ? 'page' : undefined}>{p.label}</a>)}</nav>
     <main id="main-content" tabIndex={-1} ref={mainRef}>{page === 'research' ? <Research showAll={showAll} setShowAll={setShowAll} /> : page === 'experience' ? <Experience /> : <BeyondResearch />}</main>
-    <footer><span>Hsiang-Chen (Jen) Yeh</span><span>Updated September 2026 · <a href="mailto:hyeh10@jh.edu">hyeh10@jh.edu</a></span></footer>
+    <footer><span>Hsiang-Chen (Jen) Yeh</span><span>Updated October 2026 · <a href="mailto:hyeh10@jh.edu">hyeh10@jh.edu</a></span></footer>
   </div>;
 }
 export default App;
