@@ -85,7 +85,18 @@ export const publications: Publication[] = [
     "title": "Word-Aligned Prosody Reflects Speaker Differences More Than Depression or PTSD Severity.",
     "authors": "Hsiang-Chen Yeh, Aurosweta Mahapatra, Shreeram Suresh Chandra, Ryan L. Boyd, and Berrak Sisman",
     "status": "Submitted to ICASSP 2027.",
-    "kind": "review"
+    "kind": "review",
+    "links": [
+      {
+        "label": "PDF",
+        "href": "https://arxiv.org/pdf/2610.15181"
+      },
+      {
+        "label": "Code",
+        "href": "https://github.com/jen900704/word-aligned-prosody"
+      }
+    ],
+    "highlight": "Averaged over many words, prosody gives stable speaker-level scores, but these scores do not detectably track depression or PTSD severity."
   },
   {
     "title": "When Memories Become Visible: Externalizing Music-Evoked Autobiographical Memories with Generative AI.",
