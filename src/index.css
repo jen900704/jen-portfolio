@@ -1,31 +1,75 @@
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-  color: #292b31;
-  background: #fff;
-  --accent: #873850;
-  --accent-hover: #62263a;
-  --muted: #626670;
-  --line: #e7e8ec;
+  --font-sans: "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-serif: "Newsreader Variable", "Newsreader", "Iowan Old Style", Georgia, serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --bg: #f7f5f2;
+  --bg-elev: #ffffff;
+  --surface: #fbfaf8;
+  --ink: #1a1820;
+  --ink-2: #3b3843;
+  --muted: #5f5b66;
+  --faint: #6f6b76;
+  --line: #e7e3de;
+  --line-strong: #d6d0c9;
+  --accent: #8a2e4d;
+  --accent-ink: #7a2643;
+  --accent-soft: #f5e9ed;
+  --accent-2: #5b4b8a;
+  --on-accent: #ffffff;
+  --wave-a: #a23a5e;
+  --wave-b: #6a58a6;
+  --glow-a: rgba(162, 58, 94, .20);
+  --glow-b: rgba(106, 88, 166, .16);
+  --shadow: 0 1px 2px rgba(26, 24, 32, .04), 0 8px 28px rgba(26, 24, 32, .06);
+  --shadow-lift: 0 2px 4px rgba(26, 24, 32, .05), 0 18px 44px rgba(26, 24, 32, .10);
+  --radius: 18px;
+
+  color-scheme: light;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--bg);
+  font-size: 16px;
+  line-height: 1.65;
+  font-weight: 400;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  font-size: 16px;
-  line-height: 1.7;
-  font-weight: 400;
-  color-scheme: light;
 }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e0d11; --bg-elev: #17151c; --surface: #131218;
+    --ink: #efecf2; --ink-2: #cdc8d4; --muted: #9a95a3; --faint: #8c8794;
+    --line: #26232c; --line-strong: #34303b;
+    --accent: #e48aa8; --accent-ink: #f0a5bd; --accent-soft: #2a1820; --accent-2: #a594e0; --on-accent: #1a0d13;
+    --wave-a: #e48aa8; --wave-b: #9d8ae0;
+    --glow-a: rgba(228, 138, 168, .16); --glow-b: rgba(157, 138, 224, .14);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.28);
+    --shadow-lift: 0 2px 4px rgba(0,0,0,.35), 0 18px 44px rgba(0,0,0,.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e0d11; --bg-elev: #17151c; --surface: #131218;
+  --ink: #efecf2; --ink-2: #cdc8d4; --muted: #9a95a3; --faint: #8c8794;
+  --line: #26232c; --line-strong: #34303b;
+  --accent: #e48aa8; --accent-ink: #f0a5bd; --accent-soft: #2a1820; --accent-2: #a594e0; --on-accent: #1a0d13;
+  --wave-a: #e48aa8; --wave-b: #9d8ae0;
+  --glow-a: rgba(228, 138, 168, .16); --glow-b: rgba(157, 138, 224, .14);
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.28);
+  --shadow-lift: 0 2px 4px rgba(0,0,0,.35), 0 18px 44px rgba(0,0,0,.4);
+  color-scheme: dark;
+}
+
 * { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; }
-a { color: var(--accent); text-decoration: none; text-underline-offset: 4px; }
-a:hover { color: var(--accent-hover); text-decoration: underline; }
-button, select { font: inherit; }
-button { cursor: pointer; background: transparent; color: inherit; border: 1px solid var(--line); padding: 6px 12px; border-radius: 4px; }
-button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-button:disabled { cursor: default; opacity: .45; }
-a:focus-visible, button:focus-visible, summary:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
-img { max-width: 100%; height: auto; }
-h1, h2, h3, p { margin: 0; }
-p + p { margin-top: 14px; }
-h1 { font-size: 2.4rem; line-height: 1.2; font-weight: 650; letter-spacing: -.045em; }
-h2 { font-size: 1.5rem; line-height: 1.35; font-weight: 550; letter-spacing: -.025em; margin-bottom: 20px; }
-h3 { font-size: 1rem; line-height: 1.5; font-weight: 600; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; min-width: 320px; background: var(--bg); color: var(--ink); transition: background-color .3s ease, color .3s ease; }
+::selection { background: var(--accent); color: var(--on-accent); }
+a { color: var(--accent-ink); text-decoration: none; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration: underline; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select { font: inherit; }
+a:focus-visible, button:focus-visible, summary:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+img { max-width: 100%; height: auto; display: block; }
+h1, h2, h3, h4, p { margin: 0; }

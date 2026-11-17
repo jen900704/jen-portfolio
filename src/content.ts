@@ -1,0 +1,175 @@
+export const researchRoles = [
+  {
+    lab: 'Speech and Machine Learning Lab',
+    institution: 'Johns Hopkins University · Center for Language & Speech Processing',
+    role: 'Research Assistant',
+    adviser: 'Berrak Sisman',
+    date: 'Oct 2025 – Present',
+    href: 'https://www.clsp.jhu.edu/faculty/berrak-sisman/',
+    description: 'Controlled evaluations of speech models for depression and PTSD: speaker leakage, measurement reliability, and edited-audio tests of what a model responds to.',
+    current: true,
+  },
+  {
+    lab: 'Human Language Analysis Lab',
+    institution: 'Vanderbilt University',
+    role: 'Summer 2026 Research Intern; continuing collaborator',
+    adviser: 'H. Andrew Schwartz',
+    date: 'Jun 2026 – Present',
+    href: 'https://computing.vanderbilt.edu/person/h-andrew-schwartz/',
+    description: 'Developing and validating speech representations for PTSD and affective outcomes, including within-person measurement from daily speech diaries.',
+    current: true,
+  },
+  {
+    lab: 'Computational Social Science Lab',
+    institution: 'Vanderbilt University',
+    role: 'Research Assistant',
+    adviser: 'Ryan L. Boyd',
+    date: 'Oct 2025 – Present',
+    href: 'https://computing.vanderbilt.edu/person/ryan-boyd/',
+    description: 'Applied AttributioNet to more than 125,000 observations to study how people explain everyday events in natural language.',
+    current: true,
+  },
+  {
+    lab: 'Borderline Personality Disorder Research Collaboration',
+    institution: 'Carnegie Mellon University LTI · McMaster University',
+    role: 'Lead author',
+    adviser: 'Vasudha Varadarajan and Allison Lahnala',
+    adviserLabel: 'Collaborators',
+    date: 'Jul 2026 – Present',
+    href: 'https://www.lti.cs.cmu.edu/people/staff/varadarajan-vasudha.html',
+    description: 'Studying onset timing, diagnostic delay, and meaning-making in narratives written by adults with self-reported BPD.',
+    current: true,
+  },
+  {
+    lab: 'Youth Violence AI Surveillance System',
+    institution: 'JHU Bloomberg School of Public Health',
+    role: 'Research Assistant',
+    adviser: 'Ahmed Hassoon',
+    date: 'Jan – Sep 2026',
+    href: 'https://publichealth.jhu.edu/faculty/3198/ahmed-hassoon',
+    description: 'Built a HIPAA-compliant Azure and large language model pipeline for youth-violence surveillance in electronic health records.',
+  },
+  {
+    lab: 'Computational Cognition, Vision, & Learning Group',
+    institution: 'Johns Hopkins University',
+    role: 'Research Assistant',
+    adviser: 'Zongwei Zhou and Alan Yuille',
+    date: 'Aug – Dec 2025',
+    href: 'https://ccvl.jhu.edu/',
+    description: 'Built PanTS Viewer for more than 300 GB of computed tomography data.',
+  },
+  {
+    lab: 'Institute for AI Industry Research, Tsinghua University',
+    institution: 'Human-Centered Intelligence Program',
+    role: 'Research Assistant',
+    adviser: 'Jiangtao Gong',
+    date: 'May – Oct 2025',
+    href: 'https://air.tsinghua.edu.cn/en/',
+    description: 'Co-led psychometric evaluation of generative AI for music-evoked autobiographical memories.',
+  },
+  {
+    lab: 'WellCheq',
+    institution: 'Digital mental health platform · Remote, US',
+    role: 'Researcher',
+    adviser: 'Jodi Miller',
+    date: 'Jan – Aug 2025',
+    href: 'https://wellcheq.com/about-us',
+    description: 'Authored two trauma-informed, school-based intervention guides.',
+  },
+  {
+    lab: 'Trauma Intervention Research Team',
+    institution: 'Johns Hopkins School of Nursing',
+    role: 'Research Assistant',
+    adviser: 'Tamar Rodney',
+    date: 'Nov 2024 – Nov 2025',
+    href: 'https://nursing.jhu.edu/faculty-research/faculty/directory/tamar-rodney/',
+    description: 'Synthesized linguistic markers of therapeutic change for an NIH R21 application.',
+  },
+  {
+    lab: 'Forensic Psychology and Language Analysis Lab',
+    institution: 'Fu Jen Catholic University · College of Medicine',
+    role: 'Research Assistant',
+    adviser: 'Chien Huang',
+    date: 'Jun 2022 – Jun 2024',
+    href: 'https://researchinfo.fju.edu.tw/professors/3114',
+    description: 'Designed studies and conducted LIWC analyses of hate speech and prosocial lying; student PI on an NSTC undergraduate research grant.',
+  },
+];
+
+export const clinical = [
+  {
+    site: 'Johns Hopkins Child & Adolescent Psychiatry / Pediatric Emergency Department',
+    href: 'https://www.hopkinsmedicine.org/psychiatry/specialty-areas/child-adolescent',
+    role: 'Clinical Mental Health Counseling Intern · 600-hour internship',
+    supervisor: 'Marco Grados, MD, MPH',
+    supervisorHref: 'https://profiles.hopkinsmedicine.org/provider/marco-grados/2705363',
+    date: 'Aug 2026 – May 2027',
+    description: 'Family-Based Crisis Intervention, suicide risk assessment, and safety planning for youth with ADHD, anxiety, depression, and oppositional defiant disorder.',
+  },
+  {
+    site: 'Johns Hopkins AIDS Psychiatry Service, Bartlett Clinic',
+    role: 'Practicum Trainee · 100-hour practicum',
+    supervisor: 'Nicholas P. Schweizer, EdD, LCPC',
+    supervisorHref: 'https://valleyintegrativepsych.com/nicholas-p-schweizer-ed-d-lcpc/',
+    date: 'Jan – May 2026',
+    description: 'Clinical training with clients living with HIV and co-occurring depression, trauma, or substance use disorders.',
+  },
+];
+
+export const education = [
+  {
+    school: 'Johns Hopkins University',
+    degree: 'M.S., Clinical Mental Health Counseling',
+    gpa: '3.96 / 4.0',
+    date: '2024 – 2027 (expected)',
+    detail: 'JHU Merit Scholarship, $26,400 awarded to date. Pursuing licensure as a Maryland Licensed Clinical Professional Counselor (LCPC).',
+  },
+  {
+    school: 'University of Colorado Boulder',
+    degree: 'M.S., Computer Science',
+    gpa: '3.93 / 4.0',
+    date: '2024 – 2026',
+    detail: 'Deep Learning for NLP; Introduction to Machine Learning; Approximation Algorithms and Linear Programming; Advanced Data Structures, RSA and Quantum Algorithms.',
+  },
+  {
+    school: 'Fu Jen Catholic University',
+    degree: 'B.A., Applied Arts',
+    gpa: '4.0 / 4.0 · Rank 1 / 62',
+    date: '2020 – 2024',
+    detail: 'Valedictorian; six Outstanding Academic Awards. 42 credits of psychology coursework, including clinical and abnormal psychology, assessment, and experimental psychology.',
+  },
+];
+
+export const skills = [
+  { group: 'Psychology & behavioral methods', items: ['Psychological measurement', 'Experimental design', 'Survey design'] },
+  { group: 'Quantitative & computational', items: ['Reliability & construct validation', 'Multilevel & robust regression', 'Equivalence testing', 'Speech / NLP representation learning', 'Multimodal modeling', 'Participant-level validation'] },
+  { group: 'Software & tools', items: ['Python', 'R', 'PyTorch', 'Hugging Face', 'scikit-learn', 'LIWC', 'Linux / Slurm', 'Git'] },
+  { group: 'Languages', items: ['Mandarin', 'English', 'Japanese (JLPT N1)'] },
+];
+
+export const honors: { group: string; items: [string, string][] }[] = [
+  { group: 'Awards', items: [
+    ['2023', 'Undergraduate Research Grant, National Science and Technology Council (Taiwan)'],
+    ['2018 – 2019', 'Japan–Taiwan Exchange Association Full Scholarship (JPY 4 million)'],
+  ] },
+  { group: 'Service', items: [
+    ['2026', 'Ad Hoc Reviewer, Journal of Language and Social Psychology; Scientific Reports'],
+    ['2025 – 2026', 'Student Mental Health & Wellbeing Committee Chair, Chi Sigma Iota'],
+    ['2022 – 2024', 'Student Group Convener, Taiwanese Psychological Association'],
+  ] },
+];
+
+export const peopleLinks: Record<string, string> = {
+  'Berrak Sisman': 'https://engineering.jhu.edu/faculty/berrak-sisman/',
+  'H. Andrew Schwartz': 'https://haschwartz.com/',
+  'Ahmed Hassoon': 'https://malonecenter.jhu.edu/people/ahmed-hassoon/',
+  'Ryan L. Boyd': 'https://www.ryanboyd.io/',
+  'Zongwei Zhou': 'https://www.zongweiz.com/',
+  'Alan Yuille': 'https://www.cs.jhu.edu/~ayuille/',
+  'Jiangtao Gong': 'https://air.tsinghua.edu.cn/en/info/1046/1477.htm',
+  'Jodi Miller': 'https://wellcheq.com/about-us',
+  'Tamar Rodney': 'https://nursing.jhu.edu/faculty-research/faculty/directory/tamar-rodney/',
+  'Chien Huang': 'https://researchinfo.fju.edu.tw/professors/3114',
+  'Vasudha Varadarajan': 'https://www.lti.cs.cmu.edu/people/staff/varadarajan-vasudha.html',
+  'Allison Lahnala': 'https://www.eng.mcmaster.ca/cas/faculty/allison-lahnala/',
+};

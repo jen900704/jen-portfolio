@@ -1,304 +1,417 @@
-import { useEffect, useRef, useState } from 'react';
-import { PortfolioFlipbook } from './PortfolioFlipbook';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { publications, type Publication } from './publications';
+import { researchRoles, clinical, education, skills, honors, peopleLinks } from './content';
+import { Waveform } from './Waveform';
+import { Icon } from './Icon';
+import { PortfolioFlipbook } from './PortfolioFlipbook';
 import './App.css';
 
-type Page = 'research' | 'experience' | 'beyond';
-const pages: { id: Page; label: string }[] = [
-  { id: 'research', label: 'Research' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'beyond', label: 'Beyond Research' },
-];
 const base = import.meta.env.BASE_URL;
-const routeFromHash = (): Page => {
-  const hash = window.location.hash.slice(1);
-  if (['beyond', 'art-portfolio', 'exhibitions'].includes(hash)) return 'beyond';
-  if (['experience', 'clinical', 'education', 'projects'].includes(hash)) return 'experience';
-  return 'research';
+const EMAIL = 'hyeh10@jh.edu';
+
+const nav = [
+  { id: 'research', label: 'Research' },
+  { id: 'publications', label: 'Publications' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'beyond', label: 'Beyond' },
+];
+// Older links (#clinical, #art-portfolio, ...) keep working.
+const hashAliases: Record<string, string> = {
+  'art-portfolio': 'beyond', exhibitions: 'beyond', projects: 'software', clinical: 'clinical', education: 'education',
 };
 
-const researchRoles = [
-  {
-    lab: 'Speech and Machine Learning Lab',
-    institution: 'Johns Hopkins University · Center for Language & Speech Processing',
-    role: 'Research Assistant · Adviser: Berrak Sisman',
-    date: 'Oct 2025–Present',
-    href: 'https://www.clsp.jhu.edu/faculty/berrak-sisman/',
-    linkLabel: 'Adviser profile: Berrak Sisman',
-    description: 'Built controlled speech-model evaluations for depression and PTSD, examining speaker leakage and measurement reliability.',
-  },
-  {
-    lab: 'Human Language Analysis Lab',
-    institution: 'Vanderbilt University',
-    role: 'Summer 2026 Research Intern; continuing collaborator · Adviser: H. Andrew Schwartz',
-    date: 'Jun 2026–Present',
-    href: 'https://computing.vanderbilt.edu/person/h-andrew-schwartz/',
-    linkLabel: 'Adviser profile: H. Andrew Schwartz',
-    description: 'Developing and validating speech representations for PTSD and affective outcomes across clinical corpora.',
-  },
-  {
-    lab: 'Borderline Personality Disorder Research Collaboration',
-    institution: 'Cross-institutional research collaboration',
-    role: 'First-author manuscript with Vasudha Varadarajan and Allison Lahnala',
-    date: 'Jul 2026–Present',
-    href: 'https://www.lti.cs.cmu.edu/people/staff/varadarajan-vasudha.html',
-    linkLabel: 'Collaborator profile: Vasudha Varadarajan',
-    description: 'Studying onset timing, diagnostic delay, and meaning-making with collaborators at the Language Technologies Institute at Carnegie Mellon University and McMaster University.',
-  },
-  {
-    lab: 'Youth Violence AI Surveillance System',
-    institution: 'JHU Bloomberg School of Public Health',
-    role: 'Research Assistant · Adviser: Ahmed Hassoon',
-    date: 'Jan–Sep 2026',
-    href: 'https://publichealth.jhu.edu/faculty/3198/ahmed-hassoon',
-    linkLabel: 'Adviser profile: Ahmed Hassoon',
-    description: 'Built a HIPAA-compliant Azure and large language model pipeline for youth-violence surveillance in electronic health records.',
-  },
-  {
-    lab: 'Research on Experience and Action with Language Models',
-    institution: 'Computational Social Science Lab · Vanderbilt University',
-    role: 'Research Assistant · Adviser: Ryan L. Boyd',
-    date: 'Oct 2025–Present',
-    href: 'https://computing.vanderbilt.edu/person/ryan-boyd/',
-    linkLabel: 'Adviser profile: Ryan L. Boyd',
-    description: 'Applied AttributioNet to more than 125,000 observations across contexts.',
-  },
-  {
-    lab: 'Computational Cognition, Vision, & Learning Group',
-    institution: 'Johns Hopkins University',
-    role: 'Research Assistant · Advisers: Zongwei Zhou and Alan Yuille',
-    date: 'Aug–Dec 2025',
-    href: 'https://ccvl.jhu.edu/',
-    linkLabel: 'Lab website',
-    description: 'Built PanTS Viewer for more than 300 GB of computed tomography data.',
-  },
-  {
-    lab: 'Tsinghua University, Institute for AI Industry Research',
-    institution: 'Human-Centered Intelligence Program',
-    role: 'Research Assistant · Adviser: Jiangtao Gong',
-    date: 'May–Oct 2025',
-    href: 'https://air.tsinghua.edu.cn/en/',
-    linkLabel: 'Institute website',
-    description: 'Co-led psychometric evaluation of generative AI for music-evoked autobiographical memories.',
-  },
-  {
-    lab: 'WellCheq',
-    institution: 'Digital mental health platform · Remote, US',
-    role: 'Researcher · Adviser: Jodi Miller',
-    date: 'Jan–Aug 2025',
-    href: 'https://wellcheq.com/about-us',
-    linkLabel: 'Organization website',
-    description: 'Authored two trauma-informed, school-based intervention guides.',
-  },
-  {
-    lab: 'Trauma Intervention Research Team',
-    institution: 'Johns Hopkins School of Nursing',
-    role: 'Research Assistant · Adviser: Tamar Rodney',
-    date: 'Nov 2024–Nov 2025',
-    href: 'https://nursing.jhu.edu/faculty-research/faculty/directory/tamar-rodney/',
-    linkLabel: 'Adviser profile: Tamar Rodney',
-    description: 'Synthesized linguistic markers of therapeutic change for an NIH R21 application.',
-  },
-  {
-    lab: 'Forensic Psychology and Language Analysis Lab',
-    institution: 'Fu Jen Catholic University · College of Medicine',
-    role: 'Research Assistant · Adviser: Chien Huang',
-    date: 'Jun 2022–Jun 2024',
-    href: 'https://researchinfo.fju.edu.tw/professors/3114',
-    linkLabel: 'Adviser profile: Chien Huang',
-    description: 'Designed studies and conducted LIWC analyses of hate speech and prosocial lying.',
-  },
-];
-const honors = [
-  ['2023', 'Undergraduate Research Grant, National Science and Technology Council (Taiwan)'],
-  ['2018–2019', 'Japan–Taiwan Exchange Association Full Scholarship (JPY 4 million)'],
-  ['2026', 'Ad Hoc Reviewer, Journal of Language and Social Psychology'],
-  ['2022–2024', 'Student Group Convener, Taiwanese Psychological Association'],
-  ['2025–2026', 'Student Mental Health & Wellbeing Committee Chair, Chi Sigma Iota'],
-  ['2022', 'Finalist, 31st International Times Young Creative Awards'],
-];
-
-const peopleLinks: Record<string, string> = {
-  'Berrak Sisman': 'https://engineering.jhu.edu/faculty/berrak-sisman/',
-  'H. Andrew Schwartz': 'https://haschwartz.com/',
-  'Ahmed Hassoon': 'https://malonecenter.jhu.edu/people/ahmed-hassoon/',
-  'Ryan L. Boyd': 'https://www.ryanboyd.io/',
-  'Zongwei Zhou': 'https://www.zongweiz.com/',
-  'Alan Yuille': 'https://www.cs.jhu.edu/~ayuille/',
-  'Jiangtao Gong': 'https://air.tsinghua.edu.cn/en/info/1046/1477.htm',
-  'Jodi Miller': 'https://wellcheq.com/about-us',
-  'Tamar Rodney': 'https://nursing.jhu.edu/faculty-research/faculty/directory/tamar-rodney/',
-  'Norma L. Day-Vines': 'https://education.jhu.edu/directory/norma-l-day-vines-phd/',
-  'Chien Huang': 'https://researchinfo.fju.edu.tw/professors/3114',
-  'Vasudha Varadarajan': 'https://www.lti.cs.cmu.edu/people/staff/varadarajan-vasudha.html',
-  'Allison Lahnala': 'https://www.eng.mcmaster.ca/cas/faculty/allison-lahnala/',
-};
-function LinkedPeople({ text }: { text: string }) {
+/* ---------- small helpers ---------- */
+function LinkedPeople({ text }: { text: string }): ReactNode {
   const name = Object.keys(peopleLinks).find(person => text.includes(person));
   if (!name) return <>{text}</>;
   const start = text.indexOf(name);
   return <><LinkedPeople text={text.slice(0, start)} /><a href={peopleLinks[name]}>{name}</a><LinkedPeople text={text.slice(start + name.length)} /></>;
 }
-
-function AuthorNames({ text }: { text: string }) {
-  return <>{text.split('Hsiang-Chen Yeh').map((part, i) => <span key={i}>{i > 0 && <strong>Hsiang-Chen Yeh</strong>}{part}</span>)}</>;
+function AuthorNames({ text, coSecond }: { text: string; coSecond?: boolean }) {
+  return <>{text.split('Hsiang-Chen Yeh').map((part, i) => <span key={i}>{i > 0 && <strong className="me">Hsiang-Chen Yeh{coSecond && <sup title="Co-second author">†</sup>}</strong>}{part}</span>)}</>;
 }
-function Paper({ paper }: { paper: Publication }) {
-  const links = paper.links?.filter((link, index, all) => all.findIndex(item => item.href === link.href) === index) ?? [];
-  return <li className={`paper${paper.figure ? ' paper-with-figure' : ''}`}>
-    {paper.figure && <figure className="paper-figure">
-      <a href={`${base}${paper.figure.src}`} target="_blank" rel="noopener noreferrer" aria-label={`Enlarge figure: ${paper.title}`}>
-        <img src={`${base}${paper.figure.src}`} alt={paper.figure.alt} width={paper.figure.width} height={paper.figure.height} loading="lazy" />
+function SectionHead({ index, kicker, title, children }: { index: string; kicker: string; title: string; children?: ReactNode }) {
+  return <header className="section-head" data-reveal>
+    <p className="kicker"><span className="kicker-index">{index}</span>{kicker}</p>
+    <h2>{title}</h2>
+    {children && <p className="section-lede">{children}</p>}
+  </header>;
+}
+
+/* ---------- reveal on scroll ---------- */
+function useReveal(dep: unknown) {
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-in)'));
+    if (!('IntersectionObserver' in window)) { els.forEach(el => el.classList.add('is-in')); return; }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    els.forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, [dep]);
+}
+
+/* ---------- theme ---------- */
+type Theme = 'light' | 'dark';
+function readTheme(): Theme {
+  const attr = document.documentElement.getAttribute('data-theme');
+  if (attr === 'light' || attr === 'dark') return attr;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+function ThemeToggle() {
+  const [theme, setTheme] = useState<Theme>(readTheme);
+  const flip = () => {
+    const next: Theme = theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch { /* storage unavailable */ }
+    setTheme(next);
+  };
+  return <button type="button" className="icon-button" onClick={flip} aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} title={theme === 'dark' ? 'Light theme' : 'Dark theme'}>
+    <Icon name={theme === 'dark' ? 'sun' : 'moon'} />
+  </button>;
+}
+
+/* ---------- header ---------- */
+function SiteHeader({ active }: { active: string }) {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const on = () => setScrolled(window.scrollY > 8);
+    on(); window.addEventListener('scroll', on, { passive: true });
+    return () => window.removeEventListener('scroll', on);
+  }, []);
+  return <header className={`site-header${scrolled ? ' is-scrolled' : ''}${open ? ' is-open' : ''}`}>
+    <div className="header-inner">
+      <a className="brand" href="#top" onClick={() => setOpen(false)} aria-label="Hsiang-Chen (Jen) Yeh, back to top">
+        <span className="brand-mark" aria-hidden="true">HY</span>
+        <span className="brand-name">Jen Yeh</span>
       </a>
-      <figcaption>{paper.figure.caption} <span aria-hidden="true">↗</span></figcaption>
-    </figure>}
-    <div className="paper-content">
-      <h3>{paper.title}</h3>
-      <p className="authors"><AuthorNames text={paper.authors} /></p>
-      <p className={paper.kind === 'published' ? 'venue' : 'status'}>{paper.status}</p>
+      <nav aria-label="Main" id="main-nav">
+        {nav.map(n => <a key={n.id} href={`#${n.id}`} aria-current={active === n.id ? 'true' : undefined} onClick={() => setOpen(false)}>{n.label}</a>)}
+      </nav>
+      <div className="header-actions">
+        <a className="cv-chip" href={`${base}Jen_CV_short.pdf`}>CV<Icon name="arrow" /></a>
+        <ThemeToggle />
+        <button type="button" className="icon-button menu-button" aria-expanded={open} aria-controls="main-nav" aria-label="Menu" onClick={() => setOpen(o => !o)}><Icon name={open ? 'close' : 'menu'} /></button>
+      </div>
+    </div>
+  </header>;
+}
+
+/* ---------- hero ---------- */
+function Hero() {
+  return <section className="hero" id="top" aria-labelledby="name">
+    <Waveform />
+    <div className="hero-grid">
+      <div className="hero-copy">
+        <p className="eyebrow" data-reveal>Speech · Language · Mental health</p>
+        <h1 id="name" data-reveal>Hsiang-Chen Yeh</h1>
+        <p className="thesis" data-reveal>I’m <span className="nick">Jen</span>. I study whether mental health models built on speech and language <em>measure what they claim to.</em></p>
+        <div className="bio" data-reveal>
+          <p>Informed by clinical training, I develop speech, language, and multimodal AI methods for mental health and psychological understanding. I am an M.S. student in Clinical Mental Health Counseling at Johns Hopkins University and hold an M.S. in Computer Science from the University of Colorado Boulder.</p>
+          <p><LinkedPeople text="I work with Berrak Sisman at JHU, and with H. Andrew Schwartz and Ryan L. Boyd at Vanderbilt." /></p>
+        </div>
+        <div className="hero-actions" data-reveal>
+          <a className="btn btn-primary" href={`${base}Jen_CV_short.pdf`}><Icon name="file" />Curriculum Vitae</a>
+          <a className="btn btn-ghost" href={`mailto:${EMAIL}`}><Icon name="mail" />Email</a>
+          <span className="social">
+            <a href="https://scholar.google.com/citations?user=D2c37nAAAAAJ" aria-label="Google Scholar" title="Google Scholar"><Icon name="scholar" /></a>
+            <a href="https://github.com/jen900704" aria-label="GitHub" title="GitHub"><Icon name="github" /></a>
+            <a href="https://www.linkedin.com/in/hsiang-chen-yeh-760bb02ba/" aria-label="LinkedIn" title="LinkedIn"><Icon name="linkedin" /></a>
+          </span>
+        </div>
+        <p className="status-pill" data-reveal>Applying to PhD programs for Fall 2027</p>
+      </div>
+      <figure className="portrait-wrap" data-reveal>
+        <img className="portrait" src={`${base}portrait.webp`} alt="Portrait of Hsiang-Chen (Jen) Yeh" width="640" height="640" fetchPriority="high" />
+        <figcaption>
+          <span><strong>Johns Hopkins</strong> Speech &amp; ML Lab</span>
+          <span><strong>Vanderbilt</strong> HLAB · CSS Lab</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>;
+}
+
+/* ---------- research ---------- */
+function Bar({ label, value, display, tone }: { label: string; value: number; display: string; tone?: 'muted' }) {
+  return <div className={`bar${tone ? ' bar-muted' : ''}`}>
+    <div className="bar-top"><span>{label}</span><span className="bar-value">{display}</span></div>
+    <div className="bar-track"><div className="bar-fill" style={{ ['--v' as string]: `${value}%` }} /></div>
+  </div>;
+}
+const questions = [
+  { title: 'Is the model hearing symptoms, or the speaker?', body: 'Speaker-controlled evaluation, and edited audio (text-to-speech and voice conversion) that separates a person’s voice from their words.' },
+  { title: 'Do interpretable features add information?', body: 'Controlled tests of psychological word categories and word-level prosody, with reliability analysis before clinical claims.' },
+  { title: 'Can speech track change within one person?', body: 'Speech and transcript representations for day-to-day symptom measurement from daily speech diaries.' },
+  { title: 'How do people make sense of experience in language?', body: 'Everyday causal explanation at scale, and narratives about onset and diagnostic delay in borderline personality disorder.' },
+] as const;
+
+function Research() {
+  return <section id="research" className="section" aria-labelledby="research-title">
+    <SectionHead index="01" kicker="Research" title="What I work on">
+      Clinical training taught me that one label rarely captures a person. My research asks what speech and language models are actually responding to, and whether their scores hold up for people they have not seen.
+    </SectionHead>
+    <h3 id="research-title" className="sr-only">Research questions</h3>
+    <ol className="questions">
+      {questions.map((q, i) => <li key={q.title} data-reveal style={{ ['--d' as string]: `${i * 70}ms` }}>
+        <span className="q-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+        <h3>{q.title}</h3>
+        <p>{q.body}</p>
+      </li>)}
+    </ol>
+
+    <h3 className="sub-head" data-reveal>Selected findings</h3>
+    <div className="findings">
+      <article className="finding" data-reveal>
+        <p className="finding-venue">Interspeech 2026</p>
+        <p className="finding-number">97.65% <span className="arrow" aria-hidden="true">→</span> 58.74%</p>
+        <p className="finding-claim">Same model, same test segments: accuracy depended on whether the test speakers had been heard in training.</p>
+        <div className="bars" role="img" aria-label="Accuracy 97.65 percent with speaker overlap, 58.74 percent on unseen speakers">
+          <Bar label="Test speakers heard in training" value={97.65} display="97.65%" />
+          <Bar label="Unseen speakers" value={58.74} display="58.74%" tone="muted" />
+        </div>
+        <p className="finding-foot">wav2vec 2.0 · training size held at 5,117 segments · same 714 test segments</p>
+      </article>
+      <article className="finding" data-reveal style={{ ['--d' as string]: '80ms' }}>
+        <p className="finding-venue">EMNLP 2026 · Main</p>
+        <p className="finding-number finding-words">Interpretive, not predictive</p>
+        <p className="finding-claim">LIWC was tested against controls that keep its numeric shape but break its meaning. Its predictive gains were inconsistent; its value is in describing language.</p>
+        <ul className="chips-grid" aria-label="Conditions compared">
+          <li className="chip-strong">Intact LIWC</li><li>PCA-rotated</li><li>Participant-shuffled</li><li>Random-marginal</li>
+        </ul>
+        <p className="finding-foot">Two English and three Chinese corpora</p>
+      </article>
+      <article className="finding" data-reveal style={{ ['--d' as string]: '160ms' }}>
+        <p className="finding-venue">ICASSP 2027 · under review</p>
+        <p className="finding-number">.997 <span className="vs">vs</span> .044</p>
+        <p className="finding-claim">Word-aligned prosody gives very stable speaker summaries, yet they barely track depression severity.</p>
+        <dl className="stats">
+          <div><dt>Consistency of speaker summaries</dt><dd>up to .997</dd></div>
+          <div><dt>|ρ| with PHQ-8 on DAIC-WOZ</dt><dd>at most .044</dd></div>
+        </dl>
+        <p className="finding-foot">Generalizability theory · four corpora</p>
+      </article>
+    </div>
+  </section>;
+}
+
+/* ---------- publications ---------- */
+function Paper({ paper, i }: { paper: Publication; i: number }) {
+  return <li className={`paper${paper.figure ? ' has-figure' : ''}`} data-reveal style={{ ['--d' as string]: `${Math.min(i, 4) * 50}ms` }}>
+    <div className="paper-meta">
+      <span className={`venue-tag kind-${paper.kind}`}>{paper.venue}</span>
+    </div>
+    <div className="paper-body">
+      <h4>{paper.title}</h4>
+      <p className="authors"><AuthorNames text={paper.authors} coSecond={paper.coSecond} /></p>
+      {paper.note && <p className="paper-note">{paper.note}</p>}
       {paper.highlight && <p className="paper-highlight">{paper.highlight}</p>}
-      {links.length > 0 && <div className="paper-resources" role="group" aria-label={`Resources for ${paper.title}`}>
-        {links.map(link => <a className="resource-button" key={link.href} href={link.href} aria-label={`${link.label}: ${paper.title}`}>{link.label}</a>)}
+      {paper.links && paper.links.length > 0 && <div className="paper-links" role="group" aria-label={`Links for ${paper.title}`}>
+        {paper.links.map(l => <a key={l.href} className="pill-link" href={l.href} aria-label={`${l.label}: ${paper.title}`}>{l.label}<Icon name="arrow" /></a>)}
       </div>}
     </div>
+    {paper.figure && <figure className="paper-figure">
+      <a href={`${base}${paper.figure.src}`} target="_blank" rel="noopener noreferrer" aria-label={`Open figure: ${paper.figure.caption}`}>
+        <img src={`${base}${paper.figure.src}`} alt={paper.figure.alt} width={paper.figure.width} height={paper.figure.height} loading="lazy" />
+      </a>
+      <figcaption>{paper.figure.caption}</figcaption>
+    </figure>}
   </li>;
 }
-function Research({ showAll, setShowAll }: { showAll: boolean; setShowAll: (value: boolean) => void }) {
-  const selectedCount = publications.filter(p => p.kind === 'published').length;
-  return <>
-    <section className="intro" aria-labelledby="name">
+const pubGroups: { title: string; items: Publication[] }[] = [
+  { title: 'Publications', items: publications.filter(p => p.kind === 'published' && (p.type ?? 'paper') === 'paper') },
+  { title: 'Under review', items: publications.filter(p => p.kind === 'review') },
+  { title: 'In preparation', items: publications.filter(p => p.kind === 'preparation') },
+  { title: 'Report & poster', items: publications.filter(p => p.kind === 'published' && p.type && p.type !== 'paper') },
+];
+function Publications() {
+  return <section id="publications" className="section" aria-labelledby="pub-title">
+    <SectionHead index="02" kicker="Publications" title="Papers & manuscripts" />
+    <h3 id="pub-title" className="sr-only">Publications list</h3>
+    {pubGroups.map(g => <div key={g.title} className="pub-group">
+      <h3 className="pub-group-title" data-reveal>{g.title}<span className="count">{g.items.length}</span></h3>
+      <ul className="papers">{g.items.map((p, i) => <Paper key={p.title} paper={p} i={i} />)}</ul>
+    </div>)}
+    <p className="footnote"><sup>†</sup> Co-second author.</p>
+  </section>;
+}
+
+/* ---------- experience ---------- */
+type Role = (typeof researchRoles)[number];
+const advisorLabel = (r: Role) => ('adviserLabel' in r && r.adviserLabel) ? r.adviserLabel : r.adviser.includes(' and ') ? 'Advisors' : 'Advisor';
+function Experience() {
+  return <section id="experience" className="section" aria-labelledby="exp-title">
+    <SectionHead index="03" kicker="Experience" title="Research, clinical training & education">
+      Research in speech and language, grounded in psychology and supervised clinical training.
+    </SectionHead>
+    <h3 id="exp-title" className="sr-only">Experience</h3>
+    <div className="exp-layout">
       <div>
-        <h1 id="name">Hsiang-Chen Yeh <span className="nickname">Jen</span></h1>
-        <p className="research-keywords">Computational mental health · Speech & NLP · Multimodal learning</p>
-        <p className="research-statement">I develop speech, language, and multimodal AI methods for computational mental health. Informed by clinical training, I aim to build psychologically grounded models that generalize across people and meaningfully support mental health understanding and assessment.</p>
-        <p>I am an M.S. student in Clinical Mental Health Counseling at Johns Hopkins University and hold an M.S. in Computer Science from the University of Colorado Boulder. <LinkedPeople text="I work with Berrak Sisman at JHU and H. Andrew Schwartz and Ryan L. Boyd at Vanderbilt." /></p>
-        <p className="contact-links"><a className="action-link action-primary" href={`${base}Jen_CV_short.pdf`}>View CV <span className="file-label">PDF</span></a><a className="action-link action-secondary" href="mailto:hyeh10@jh.edu">Email</a><a href="https://github.com/jen900704">GitHub</a><a href="https://scholar.google.com/citations?user=D2c37nAAAAAJ">Google Scholar</a><a href="https://www.linkedin.com/in/hsiang-chen-yeh-760bb02ba">LinkedIn</a></p>
-        <p className="availability">Seeking Fall 2027 PhD opportunities in speech, NLP, and computational mental health.</p>
+        <h3 className="sub-head" data-reveal>Research</h3>
+        <ol className="timeline">
+          {researchRoles.filter(r => r.current).map(r => <li key={r.lab} data-reveal className="is-current">
+            <span className="tl-dot" aria-hidden="true" />
+            <p className="tl-date">{r.date}</p>
+            <h4><a href={r.href}>{r.lab}</a></h4>
+            <p className="tl-inst">{r.institution}</p>
+            <p className="tl-role">{r.role} · <span className="muted">{advisorLabel(r)}:</span> <LinkedPeople text={r.adviser} /></p>
+            <p className="tl-desc">{r.description}</p>
+          </li>)}
+        </ol>
+        <details className="earlier" data-reveal>
+          <summary>Earlier research experience <span className="count">{researchRoles.filter(r => !r.current).length}</span></summary>
+          <ol className="timeline timeline-compact">
+            {researchRoles.filter(r => !r.current).map(r => <li key={r.lab}>
+              <span className="tl-dot" aria-hidden="true" />
+              <p className="tl-date">{r.date}</p>
+              <h4><a href={r.href}>{r.lab}</a></h4>
+              <p className="tl-inst">{r.institution} · {advisorLabel(r)}: <LinkedPeople text={r.adviser} /></p>
+              <p className="tl-desc">{r.description}</p>
+            </li>)}
+          </ol>
+        </details>
       </div>
-      <img className="portrait" src={`${base}portrait.png`} alt="Hsiang-Chen Yeh" width="148" height="180" />
-    </section>
-    <section aria-labelledby="ongoing-title">
-      <h2 id="ongoing-title">Research focus</h2>
-      <ul className="research-topics">
-        <li><strong>Speech representations for mental health.</strong> Building psychologically grounded models and testing whether speech measures generalize across speakers and clinical contexts.</li>
-        <li><strong>Language and psychological experience.</strong> Studying everyday causal explanations, diagnostic delay, and meaning-making in borderline personality disorder.</li>
-      </ul>
-    </section>
-    <section className="publications-section" aria-labelledby="publications-title">
-      <div className="section-heading">
-        <h2 id="publications-title">Publications & Manuscripts</h2>
-        <div className="publication-switch" role="group" aria-label="Publication selection">
-          <button type="button" aria-pressed={!showAll} aria-controls="publication-results" onClick={() => setShowAll(false)}>Selected work <span className="count">{selectedCount}</span></button>
-          <button type="button" aria-pressed={showAll} aria-controls="publication-results" onClick={() => setShowAll(true)}>All work <span className="count">{publications.length}</span></button>
+      <div className="exp-side">
+        <div id="clinical" className="side-block">
+          <h3 className="sub-head" data-reveal>Clinical training</h3>
+          {clinical.map(c => <article key={c.site} className="card clinical-card" data-reveal>
+            <p className="tl-date">{c.date}</p>
+            <h4>{c.href ? <a href={c.href}>{c.site}</a> : c.site}</h4>
+            <p className="tl-role">{c.role}</p>
+            <p className="tl-inst">Supervisor: <a href={c.supervisorHref}>{c.supervisor}</a></p>
+            <p className="tl-desc">{c.description}</p>
+          </article>)}
+        </div>
+        <div id="education" className="side-block">
+          <h3 className="sub-head" data-reveal>Education</h3>
+          {education.map(e => <article key={e.school} className="card edu-card" data-reveal>
+            <div className="edu-top"><h4>{e.school}</h4><span className="tl-date">{e.date}</span></div>
+            <p className="tl-role">{e.degree}</p>
+            <p className="gpa">{e.gpa}</p>
+            <p className="tl-desc">{e.detail}</p>
+          </article>)}
         </div>
       </div>
-      <p className="publication-summary" role="status" aria-live="polite" aria-atomic="true">{showAll ? `All ${publications.length} works · Publications, manuscripts, and reports` : `${selectedCount} selected publications · ${publications.length} works in total`}</p>
-      <div id="publication-results" key={showAll ? 'all' : 'selected'}>
-      {showAll && <h3 className="group-heading">Publications</h3>}
-      <ul className="papers">{publications.filter(p => p.kind === 'published').map(p => <Paper key={p.title} paper={p} />)}</ul>
-      {showAll && <>
-        <h3 className="group-heading">Peer-reviewed poster</h3>
-        <ul className="papers">{publications.filter(p => p.kind === 'poster').map(p => <Paper key={p.title} paper={p} />)}</ul>
-        <h3 className="group-heading">Under review</h3>
-        <ul className="papers">{publications.filter(p => p.kind === 'review').map(p => <Paper key={p.title} paper={p} />)}</ul>
-        <h3 className="group-heading">In preparation</h3>
-        <p className="muted small">Venues listed are intended submission targets.</p>
-        <ul className="papers">{publications.filter(p => p.kind === 'preparation').map(p => <Paper key={p.title} paper={p} />)}</ul>
-        <h3 className="group-heading">Reports & other scholarly work</h3>
-        <ul className="papers">{publications.filter(p => p.kind === 'other').map(p => <Paper key={p.title} paper={p} />)}</ul>
-      </>}
+    </div>
+
+    <div className="two-col">
+      <div data-reveal>
+        <h3 className="sub-head">Methods & skills</h3>
+        {skills.map(s => <div key={s.group} className="skill-group">
+          <p className="skill-label">{s.group}</p>
+          <p className="skill-line">{s.items.join(' · ')}</p>
+        </div>)}
       </div>
-    </section>
-    <section aria-labelledby="recognition-title">
-      <h2 id="recognition-title">Selected recognition & service</h2>
-      <ul className="dated-list">{honors.slice(0, 4).map(([date, title]) => <li key={title}><span className="date">{date}</span><span>{title}</span></li>)}</ul>
-      <p className="small"><a href="#experience">Full experience, education, and honors →</a></p>
-    </section>
-  </>;
+      <div data-reveal>
+        <h3 className="sub-head">Honors & service</h3>
+        {honors.map(h => <div key={h.group} className="honor-group">
+          <p className="skill-label">{h.group}</p>
+          <ul className="dated">{h.items.map(([d, t]) => <li key={t}><span className="tl-date">{d}</span><span>{t}</span></li>)}</ul>
+        </div>)}
+      </div>
+    </div>
+
+    <div id="software" className="software card" data-reveal>
+      <div className="software-body">
+        <p className="skill-label">Software</p>
+        <h4>BodyMaps / PanTS CT search and viewer</h4>
+        <p className="tl-desc">A web interface for exploring CT scans and segmentation masks, with cohort search, slice navigation, and visualization controls.</p>
+        <div className="paper-links">
+          <a className="pill-link" href="https://github.com/jen900704/BodyMaps-PanTS-Search-Viewer">Code<Icon name="arrow" /></a>
+          <a className="pill-link" href="https://pan-ts-viewer.vercel.app">Demo<Icon name="arrow" /></a>
+        </div>
+      </div>
+    </div>
+  </section>;
 }
-function Experience() {
-  return <>
-    <header className="page-heading"><h1>Experience</h1><p>Research in speech and language, grounded in psychology and supervised clinical training.</p></header>
-    <section><h2>Research experience</h2>
-      <ul className="experience-list">{researchRoles.map(({ lab, institution, role, date, href, linkLabel, description }) => <li key={lab}>
-        <div className="entry-heading"><h3><a href={href} title={linkLabel}>{lab}<span className="sr-only"> ({linkLabel})</span></a></h3><span className="date">{date}</span></div>
-        <p>{institution}</p><p className="muted"><LinkedPeople text={role} /></p>
-        <p><LinkedPeople text={description} /></p>
-      </li>)}</ul>
-    </section>
-    <section><h2>Clinical training</h2>
-      <ul className="experience-list">
-        <li><div className="entry-heading"><h3><a href="https://www.hopkinsmedicine.org/psychiatry/specialty-areas/child-adolescent">Johns Hopkins Child & Adolescent Psychiatry / Pediatric Emergency Department</a></h3><span className="date">Aug 2026–May 2027</span></div>
-          <p>Clinical Mental Health Counseling Intern · 600-hour internship</p>
-          <p className="muted">Supervisor: <a href="https://profiles.hopkinsmedicine.org/provider/marco-grados/2705363">Marco Grados, MD, MPH</a></p>
-          <p>Family-Based Crisis Intervention, suicide risk assessment, and safety planning for youth with ADHD, anxiety, depression, and oppositional defiant disorder.</p></li>
-        <li><div className="entry-heading"><h3>Johns Hopkins AIDS Psychiatry Service, Bartlett Clinic</h3><span className="date">Jan–May 2026</span></div>
-          <p>Practicum Trainee · 100-hour practicum</p>
-          <p className="muted">Supervisor: <a href="https://valleyintegrativepsych.com/nicholas-p-schweizer-ed-d-lcpc/">Nicholas P. Schweizer, EdD, LCPC</a></p>
-          <p>Clinical training with clients living with HIV and co-occurring depression, trauma, or substance use disorders.</p></li>
-      </ul>
-    </section>
-    <section><h2>Education</h2>
-      <ul className="experience-list">
-        <li><div className="entry-heading"><h3>Johns Hopkins University</h3><span className="date">Aug 2024–May 2027 (expected)</span></div><p>M.S., Clinical Mental Health Counseling · GPA: 3.96/4.0</p><p className="muted">JHU Merit Scholarship: $26,400 awarded to date. Pursuing licensure as a Maryland Licensed Clinical Professional Counselor.</p></li>
-        <li><div className="entry-heading"><h3>University of Colorado Boulder</h3><span className="date">Aug 2024–May 2026</span></div><p>M.S., Computer Science (online) · GPA: 3.93/4.0</p><p className="muted">Relevant coursework: Deep Learning for NLP; Introduction to Machine Learning; Approximation Algorithms and Linear Programming; Advanced Data Structures, RSA and Quantum Algorithms.</p></li>
-        <li><div className="entry-heading"><h3>Fu Jen Catholic University</h3><span className="date">Sep 2020–Jun 2024</span></div><p>B.A., Applied Arts · GPA: 4.0/4.0; rank 1/62</p><p className="muted">Former double major in Clinical Psychology (B.S. program), College of Medicine. Valedictorian; six Outstanding Academic Awards.</p></li>
-      </ul>
-    </section>
-    <section><h2>Methods & skills</h2>
-      <p><strong>Psychology & behavioral methods:</strong> Psychological measurement, experimental and survey design, clinical interviewing, suicide risk assessment, and trauma-informed counseling.</p>
-      <p><strong>Quantitative & computational methods:</strong> Reliability and construct validation, multilevel and robust regression, equivalence testing, speech/NLP representation learning, multimodal modeling, and participant-level validation.</p>
-      <p><strong>Software & tools:</strong> Python, R, PyTorch, Hugging Face, scikit-learn, LIWC, Linux/Slurm, Git, and Microsoft Azure.</p>
-      <p><strong>Languages:</strong> Mandarin (native), English (fluent), Japanese (JLPT N1).</p>
-    </section>
-    <section><h2>Leadership, service & honors</h2><ul className="dated-list">{honors.map(([date, title]) => <li key={title}><span className="date">{date}</span><span>{title}</span></li>)}</ul></section>
-    <section><h2>Software & earlier projects</h2>
-      <h3>BodyMaps / PanTS CT search and viewer</h3>
-      <p>A web interface for exploring CT scans and segmentation masks, with cohort search, slice navigation, and visualization controls.</p>
-      <p className="paper-links"><a href="https://github.com/jen900704/BodyMaps-PanTS-Search-Viewer">Code</a><a href="https://pan-ts-viewer.vercel.app">Demo</a></p>
-      <details><summary>Earlier machine learning projects</summary><ul className="link-list">
-        <li><a href="https://github.com/jen900704/Random-Forest-MDD-Severity-Prediction">Random Forest MDD Severity Prediction</a></li>
-        <li><a href="https://github.com/jen900704/TF-IDF-logistic-regression-disaster-tweet-classification">TF-IDF Disaster Tweet Classification</a></li>
-        <li><a href="https://github.com/jen900704/Unsupervised-learning-using-PCA-and-K-means-clustering">PCA and K-Means Clustering</a></li>
-        <li><a href="https://github.com/jen900704/CNN-Cancer-Classification">CNN Cancer Detection</a></li>
-      </ul></details>
-    </section>
-  </>;
-}
-function BeyondResearch() {
-  return <>
-    <header className="page-heading"><h1>Beyond research</h1><p>My interest in emotion and human experience also takes shape through visual art, design, and movement.</p></header>
-    <section><h2>Freak’in Walk</h2><p className="muted">Young Designers’ Exhibition · Taipei Nangang Exhibition Center · May 2024</p>
-      <p>I translated the everyday challenges of walking through city streets into fashion design, presenting the work in a runway exhibition.</p>
-      <p><a href="https://freakinwalk.netlify.app/">Explore the exhibition →</a></p>
-    </section>
-    <section><h2>Art portfolio</h2><p className="muted">2023 · Visual explorations of emotion, trauma, and healing</p>
+
+/* ---------- beyond ---------- */
+function Beyond() {
+  return <section id="beyond" className="section" aria-labelledby="beyond-title">
+    <SectionHead index="04" kicker="Beyond research" title="Design & community" />
+    <h3 id="beyond-title" className="sr-only">Beyond research</h3>
+    <div className="beyond-grid">
+      <a className="card feature-card" href="https://freakinwalk.netlify.app/" data-reveal>
+        <p className="skill-label">Exhibition · May 2024</p>
+        <h4>Freak’in Walk</h4>
+        <p className="tl-desc">A fashion design project on the everyday challenges of walking through city streets, shown in a runway exhibition at the Young Designers’ Exhibition, Taipei.</p>
+        <span className="more">Explore the exhibition<Icon name="arrow" /></span>
+      </a>
+      <div className="card" data-reveal style={{ ['--d' as string]: '80ms' }}>
+        <p className="skill-label">Community</p>
+        <p className="tl-desc">Student Group Convener, Taiwanese Psychological Association (2022–2024): organized lectures and seminars. Chair, Chi Sigma Iota Student Mental Health &amp; Wellbeing Committee at Johns Hopkins (2025–2026).</p>
+        <p className="skill-label" style={{ marginTop: 20 }}>Creative practice</p>
+        <p className="tl-desc">Finalist, 31st International Times Young Creative Awards (2022). Selected participant, Professional Ballet Dancer Experience Camp, <a href="https://www.facebook.com/taiwanballet">Taiwan Ballet Company</a> (2022).</p>
+      </div>
+    </div>
+    <div className="card portfolio-card" data-reveal>
+      <div className="portfolio-head">
+        <div><p className="skill-label">Design portfolio · 2023</p><h4>Visual work on emotion and healing</h4></div>
+        <a className="pill-link" href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/art-therapy-portfolio-2023.pdf">Full PDF<Icon name="arrow" /></a>
+      </div>
       <PortfolioFlipbook />
-      <p className="small"><a href="https://huggingface.co/datasets/jen900704/portfolio-assets/resolve/main/reports/art-therapy-portfolio-2023.pdf">Open the complete portfolio (PDF)</a></p>
-    </section>
-    <section><h2>Dance & creative practice</h2>
-      <ul className="dated-list"><li><span className="date">Summer 2022</span><span>Selected participant, Professional Ballet Dancer Experience Camp, <a href="https://www.facebook.com/taiwanballet">Taiwan Ballet Company</a>.</span></li><li><span className="date">2022</span><span>Finalist, 31st International Times Young Creative Awards.</span></li></ul>
-    </section>
-    <section><h2>Psychology beyond the lab</h2><p>As Student Group Convener for the Taiwanese Psychological Association (2022–2024), I organized psychology lectures and academic seminars and created promotional designs. At Johns Hopkins, I chaired the Chi Sigma Iota Student Mental Health & Wellbeing Committee (2025–2026).</p></section>
-  </>;
+    </div>
+  </section>;
 }
+
+/* ---------- contact / footer ---------- */
+function Contact() {
+  return <section className="contact" aria-labelledby="contact-title" data-reveal>
+    <p className="kicker"><span className="kicker-index">05</span>Contact</p>
+    <h2 id="contact-title">I’m glad to talk about research, collaboration, or PhD programs.</h2>
+    <div className="hero-actions">
+      <a className="btn btn-primary" href={`mailto:${EMAIL}`}><Icon name="mail" />{EMAIL}</a>
+      <a className="btn btn-ghost" href={`${base}Jen_CV_short.pdf`}><Icon name="file" />CV (PDF)</a>
+    </div>
+  </section>;
+}
+
 function App() {
-  const [page, setPage] = useState<Page>(routeFromHash);
-  const [showAll, setShowAll] = useState(false);
-  const mainRef = useRef<HTMLElement>(null);
+  const [active, setActive] = useState('');
+  const firstRun = useRef(true);
+  useReveal(null);
   useEffect(() => {
-    const change = () => { setPage(routeFromHash()); window.scrollTo(0, 0); mainRef.current?.focus({ preventScroll: true }); };
-    window.addEventListener('hashchange', change);
-    return () => window.removeEventListener('hashchange', change);
+    // map legacy hashes
+    const go = () => {
+      const h = window.location.hash.slice(1);
+      const target = hashAliases[h] ?? h;
+      if (!target) return;
+      const el = document.getElementById(target);
+      if (el && (hashAliases[h] || firstRun.current)) el.scrollIntoView({ block: 'start' });
+      firstRun.current = false;
+    };
+    go();
+    window.addEventListener('hashchange', go);
+    return () => window.removeEventListener('hashchange', go);
   }, []);
   useEffect(() => {
-    document.title = page === 'research' ? 'Hsiang-Chen (Jen) Yeh | Computational Mental Health' : `${pages.find(p => p.id === page)?.label} | Hsiang-Chen (Jen) Yeh`;
-  }, [page]);
-  return <div className="site">
-    <a className="skip-link" href="#main-content" onClick={e => { e.preventDefault(); mainRef.current?.focus(); }}>Skip to content</a>
-    <nav className="site-nav" aria-label="Main navigation">{pages.map(p => <a key={p.id} href={`#${p.id}`} aria-current={page === p.id ? 'page' : undefined}>{p.label}</a>)}</nav>
-    <main id="main-content" tabIndex={-1} ref={mainRef}>{page === 'research' ? <Research showAll={showAll} setShowAll={setShowAll} /> : page === 'experience' ? <Experience /> : <BeyondResearch />}</main>
-    <footer><span>Hsiang-Chen (Jen) Yeh</span><span>Updated October 2026 · <a href="mailto:hyeh10@jh.edu">hyeh10@jh.edu</a></span></footer>
-  </div>;
+    const ids = nav.map(n => n.id);
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    ids.forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
+    return () => io.disconnect();
+  }, []);
+  return <>
+    <a className="skip-link" href="#research">Skip to content</a>
+    <SiteHeader active={active} />
+    <main>
+      <Hero />
+      <div className="container">
+        <Research />
+        <Publications />
+        <Experience />
+        <Beyond />
+        <Contact />
+      </div>
+    </main>
+    <footer className="site-footer">
+      <div className="container footer-inner">
+        <span>© 2026 Hsiang-Chen (Jen) Yeh</span>
+        <span>Updated November 2026</span>
+      </div>
+    </footer>
+  </>;
 }
 export default App;

@@ -12,7 +12,7 @@ export function PortfolioFlipbook() {
       <button type="button" disabled={page === totalPages} onClick={() => goTo(page + 1)}>Next →</button>
     </div>
     <div className="portfolio-frame" aria-busy={state === 'loading'}>
-      {state === 'error' ? <p role="status">This page could not load. <button type="button" onClick={() => setState('loading')}>Try again</button> or open the full PDF below.</p> : <img key={page} src={`${imageBase}/Slide${page}.PNG`} alt={`Art portfolio, page ${page} of ${totalPages}`} onLoad={() => setState('ready')} onError={() => setState('error')} />}
+      {state === 'error' ? <p role="status">This page could not load. <button type="button" onClick={() => setState('loading')}>Try again</button> or open the full PDF.</p> : <img key={page} src={`${imageBase}/Slide${page}.PNG`} alt={`Art portfolio, page ${page} of ${totalPages}`} onLoad={() => setState('ready')} onError={() => setState('error')} />}
     </div>
   </div>;
 }
