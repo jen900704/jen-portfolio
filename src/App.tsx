@@ -327,12 +327,13 @@ function Experience() {
     <div id="murmur" className="software card" data-reveal>
       <div className="software-body">
         <p className="skill-label">Software · 2026</p>
-        <h4>Murmur 低語日記: a private voice and writing journal</h4>
-        <p className="tl-desc">An offline web app in Traditional Chinese and English that brings speech and language analysis to everyday self-reflection. Voice features are measured on the phone and compared only with the person's own usual range. Writing is analyzed with transparent word categories that show the exact words behind each number, with a downloadable evidence report. It also offers counseling-theory exercises and a bedtime ritual. Nothing leaves the device unless the person chooses.</p>
+        <h4>Murmur 低語日記: one worry, fourteen counseling perspectives</h4>
+        <p className="tl-desc">An offline web app in Traditional Chinese and English. A person writes down one worry and looks at it through fourteen counseling approaches, three short questions at a time. The summary quotes their own words rather than filling templates, a suggested approach shows the exact words that suggested it, and a keepsake card is drawn from what they wrote. A risk screen in both languages pauses every step with help lines. Smaller tools sit around it: a voice journal compared only with the person's own usual range, and a language mirror with word-level evidence. Nothing leaves the device unless the person chooses.</p>
         <p className="tl-desc">Around the app: a multi-agent evaluation of its optional AI conversation (which found and fixed gaps in its risk screen), a preregistered bandit simulation with off-policy evaluation, a construct-validity study of its English word categories against 43,396 human emotion labels (AUC .68 to .94), and a DLATK pipeline.</p>
         <div className="paper-links">
           <a className="pill-link" href="https://jen900704.github.io/murmur-voice-journal/">App<Icon name="arrow" /></a>
           <a className="pill-link" href="https://github.com/jen900704/murmur-voice-journal">Code<Icon name="arrow" /></a>
+          <a className="pill-link" href="https://github.com/jen900704/murmur-voice-journal/blob/main/docs/change-the-angle.md">Design<Icon name="arrow" /></a>
           <a className="pill-link" href="https://github.com/jen900704/murmur-voice-journal/blob/main/docs/architecture.md">Architecture<Icon name="arrow" /></a>
         </div>
       </div>
