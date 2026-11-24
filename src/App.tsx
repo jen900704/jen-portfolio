@@ -12,12 +12,13 @@ const EMAIL = 'hyeh10@jh.edu';
 const nav = [
   { id: 'research', label: 'Research' },
   { id: 'publications', label: 'Publications' },
+  { id: 'software', label: 'Software' },
   { id: 'experience', label: 'Experience' },
   { id: 'beyond', label: 'Beyond' },
 ];
 // Older links (#clinical, #art-portfolio, ...) keep working.
 const hashAliases: Record<string, string> = {
-  'art-portfolio': 'beyond', exhibitions: 'beyond', projects: 'software', clinical: 'clinical', education: 'education',
+  'art-portfolio': 'beyond', exhibitions: 'beyond', projects: 'software', murmur: 'murmur', clinical: 'clinical', education: 'education',
 };
 
 /* ---------- small helpers ---------- */
@@ -242,7 +243,7 @@ type Role = (typeof researchRoles)[number];
 const advisorLabel = (r: Role) => ('adviserLabel' in r && r.adviserLabel) ? r.adviserLabel : r.adviser.includes(' and ') ? 'Advisors' : 'Advisor';
 function Experience() {
   return <section id="experience" className="section" aria-labelledby="exp-title">
-    <SectionHead index="03" kicker="Experience" title="Research, clinical training & education">
+    <SectionHead index="04" kicker="Experience" title="Research, clinical training & education">
       Research in speech and language, grounded in psychology and supervised clinical training.
     </SectionHead>
     <h3 id="exp-title" className="sr-only">Experience</h3>
@@ -312,21 +313,23 @@ function Experience() {
       </div>
     </div>
 
-    <div id="software" className="software card" data-reveal>
-      <div className="software-body">
-        <p className="skill-label">Software</p>
-        <h4>BodyMaps / PanTS CT search and viewer</h4>
-        <p className="tl-desc">A web interface for exploring CT scans and segmentation masks, with cohort search, slice navigation, and visualization controls.</p>
-        <div className="paper-links">
-          <a className="pill-link" href="https://github.com/jen900704/BodyMaps-PanTS-Search-Viewer">Code<Icon name="arrow" /></a>
-          <a className="pill-link" href="https://pan-ts-viewer.vercel.app">Demo<Icon name="arrow" /></a>
-        </div>
-      </div>
-    </div>
+  </section>;
+}
 
-    <div id="murmur" className="software card" data-reveal>
+/* ---------- software ---------- */
+function Software() {
+  return <section id="software" className="section" aria-labelledby="software-title">
+    <SectionHead index="03" kicker="Software" title="Things I have built">
+      Working tools with code, tests and documentation, built alongside my research.
+    </SectionHead>
+    <h3 id="software-title" className="sr-only">Software</h3>
+    <div className="software-list">
+    <div id="murmur" className="software card featured" data-reveal>
+      <a className="software-shot" href="https://jen900704.github.io/murmur-voice-journal/" aria-label="Open the Murmur app">
+        <img src={`${base}murmur-cards.gif`} width="1000" height="236" loading="lazy" alt="Three cards drawn from what people wrote in Murmur: a desk with a laptop and phone for a work worry, a cat and tea for a family worry, a heart and waves for a loss" />
+      </a>
       <div className="software-body">
-        <p className="skill-label">Software · 2026</p>
+        <p className="skill-label">Web app · 2026</p>
         <h4>Murmur 低語日記: one worry, fourteen counseling perspectives</h4>
         <p className="tl-desc">An offline web app in Traditional Chinese and English. A person writes down one worry and looks at it through fourteen counseling approaches, three short questions at a time. The summary quotes their own words rather than filling templates, a suggested approach shows the exact words that suggested it, and a keepsake card is drawn from what they wrote. A risk screen in both languages pauses every step with help lines. Smaller tools sit around it: a voice journal compared only with the person's own usual range, and a language mirror with word-level evidence. Nothing leaves the device unless the person chooses.</p>
         <p className="tl-desc">Around the app: a multi-agent evaluation of its optional AI conversation (which found and fixed gaps in its risk screen), a preregistered bandit simulation with off-policy evaluation, a construct-validity study of its English word categories against 43,396 human emotion labels (AUC .68 to .94), and a DLATK pipeline.</p>
@@ -338,13 +341,26 @@ function Experience() {
         </div>
       </div>
     </div>
+    <div id="bodymaps" className="software card" data-reveal>
+      <div className="software-body">
+        <p className="skill-label">Web interface</p>
+        <h4>BodyMaps / PanTS CT search and viewer</h4>
+        <p className="tl-desc">A web interface for exploring CT scans and segmentation masks, with cohort search, slice navigation, and visualization controls.</p>
+        <div className="paper-links">
+          <a className="pill-link" href="https://github.com/jen900704/BodyMaps-PanTS-Search-Viewer">Code<Icon name="arrow" /></a>
+          <a className="pill-link" href="https://pan-ts-viewer.vercel.app">Demo<Icon name="arrow" /></a>
+        </div>
+      </div>
+    </div>
+
+    </div>
   </section>;
 }
 
 /* ---------- beyond ---------- */
 function Beyond() {
   return <section id="beyond" className="section" aria-labelledby="beyond-title">
-    <SectionHead index="04" kicker="Beyond research" title="Design & community" />
+    <SectionHead index="05" kicker="Beyond research" title="Design & community" />
     <h3 id="beyond-title" className="sr-only">Beyond research</h3>
     <div className="beyond-grid">
       <a className="card feature-card" href="https://freakinwalk.netlify.app/" data-reveal>
@@ -416,6 +432,7 @@ function App() {
       <div className="container">
         <Research />
         <Publications />
+        <Software />
         <Experience />
         <Beyond />
         <Contact />

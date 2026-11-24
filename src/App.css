@@ -265,4 +265,11 @@ details[open] summary::before { transform: rotate(45deg); }
 .timeline-compact .tl-desc { margin-top: 4px; }
 .skill-line { font-size: .92rem; color: var(--ink-2); line-height: 1.6; }
 .software { grid-template-columns: 1fr; }
-#murmur.software { margin-top: 20px; }
+/* Software section */
+.software-list { display: grid; gap: 24px; }
+.software-list .software { margin-top: 0; }
+.software.featured { grid-template-columns: 1fr; padding: 0; overflow: hidden; }
+.software.featured .software-body { padding: 28px 32px 32px; }
+.software-shot { display: block; background: var(--surface-2, rgba(127,127,127,.06)); border-bottom: 1px solid var(--line, rgba(127,127,127,.18)); }
+.software-shot img { display: block; width: 100%; height: auto; }
+@media (max-width: 640px) { .software.featured .software-body { padding: 20px; } }
