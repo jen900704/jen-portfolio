@@ -323,6 +323,20 @@ function Experience() {
         </div>
       </div>
     </div>
+
+    <div id="murmur" className="software card" data-reveal>
+      <div className="software-body">
+        <p className="skill-label">Software · 2026</p>
+        <h4>Murmur 低語日記: a private voice and writing journal</h4>
+        <p className="tl-desc">An offline web app in Traditional Chinese and English that brings speech and language analysis to everyday self-reflection. Voice features are measured on the phone and compared only with the person's own usual range. Writing is analyzed with transparent word categories that show the exact words behind each number, with a downloadable evidence report. It also offers counseling-theory exercises and a bedtime ritual. Nothing leaves the device unless the person chooses.</p>
+        <p className="tl-desc">Around the app: a multi-agent evaluation of its optional AI conversation (which found and fixed gaps in its risk screen), a preregistered bandit simulation with off-policy evaluation, a construct-validity study of its English word categories against 43,396 human emotion labels (AUC .68 to .94), and a DLATK pipeline.</p>
+        <div className="paper-links">
+          <a className="pill-link" href="https://jen900704.github.io/murmur-voice-journal/">App<Icon name="arrow" /></a>
+          <a className="pill-link" href="https://github.com/jen900704/murmur-voice-journal">Code<Icon name="arrow" /></a>
+          <a className="pill-link" href="https://github.com/jen900704/murmur-voice-journal/blob/main/docs/architecture.md">Architecture<Icon name="arrow" /></a>
+        </div>
+      </div>
+    </div>
   </section>;
 }
 

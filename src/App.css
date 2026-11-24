@@ -265,3 +265,4 @@ details[open] summary::before { transform: rotate(45deg); }
 .timeline-compact .tl-desc { margin-top: 4px; }
 .skill-line { font-size: .92rem; color: var(--ink-2); line-height: 1.6; }
 .software { grid-template-columns: 1fr; }
+#murmur.software { margin-top: 20px; }
